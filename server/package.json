@@ -4,9 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "dev": "nodemon src -e ts,json --exec 'ts-node src'",
+    "build": "rm -rf /dist && tsc && npx copyfiles \"src/schema/**/*.graphql\" dist/",
+    "start": "npm run build && node dist/src",
+    "lint": "eslint --fix",
+    "format": "prettier -w .",
+    "generate": "graphql-codegen --config codegen.yml",
+    "update-schemas": "npx prisma generate && npx prisma db push && npm run generate"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "typescript": "^5.4.2"
+  }
 }
