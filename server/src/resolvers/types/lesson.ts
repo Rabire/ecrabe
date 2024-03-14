@@ -1,4 +1,4 @@
-// import { getIsVideoWatchedByUser } from "../../helpers/lesson-utils";
+import { getIsVideoWatchedByUser } from "../../helpers/lesson-utils";
 import { LessonResolvers } from "../../types/generated";
 
 const lessonResolver: LessonResolvers = {
@@ -27,11 +27,10 @@ const lessonResolver: LessonResolvers = {
       });
 
     const chapters = rawChapters.map((chapter) => ({
-      // isVideoWatchedByUser: getIsVideoWatchedByUser(
-      //   chapter.usersVideoProgress[0]?.watchedUntil || 0,
-      //   chapter.videoDuration
-      // ),
-      isVideoWatchedByUser: true, //TODO:
+      isVideoWatchedByUser: getIsVideoWatchedByUser(
+        chapter.usersVideoProgress[0]?.watchedUntil || 0,
+        chapter.videoDuration
+      ),
       isQuizCompletedByUser: chapter.chapterQuestionsAnswers.length > 0,
       ...chapter,
     }));

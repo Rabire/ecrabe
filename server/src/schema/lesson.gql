@@ -1,27 +1,32 @@
 type Lesson {
   id: ID!
   title: String!
+  "A short description of the lesson."
   description: String!
-  picturePath: String!
+  "The URL of the cover picture of the lesson."
   pictureUrl: String!
+  "A description of the lesson content or presentation - in markdown format."
   markdownContent: String
-  updatedAt: DateTime
+
+  # Computed
+  "Duration of the lesson in seconds."
   totalDuration: Int!
   "Completion percentage of lessons watch & quiz"
   userProgress: Int!
-  similarLessons: [Lesson!]!
+  "Date of the last update of a nested chapter."
+  updatedAt: DateTime
 
-  teacherId: String!
-
+  # Relations
   teacher: User!
   chapters: [Chapter!]!
 }
 
 input LessonInput {
   title: String!
+  "The URL of the cover picture of the lesson."
   description: String!
+  "A description of the lesson content or presentation - in markdown format."
   markdownContent: String
-  teacherId: String!
 
   sortedChapterIds: [String!]
 }

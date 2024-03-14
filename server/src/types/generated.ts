@@ -87,26 +87,29 @@ export type Comment = {
 export type Lesson = {
   __typename?: "Lesson";
   chapters: Array<Chapter>;
+  /** A short description of the lesson. */
   description: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
+  /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars["String"]["output"]>;
-  picturePath: Scalars["String"]["output"];
+  /** The URL of the cover picture of the lesson. */
   pictureUrl: Scalars["String"]["output"];
-  similarLessons: Array<Lesson>;
   teacher: User;
-  teacherId: Scalars["String"]["output"];
   title: Scalars["String"]["output"];
+  /** Duration of the lesson in seconds. */
   totalDuration: Scalars["Int"]["output"];
+  /** Date of the last update of a nested chapter. */
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
   /** Completion percentage of lessons watch & quiz */
   userProgress: Scalars["Int"]["output"];
 };
 
 export type LessonInput = {
+  /** The URL of the cover picture of the lesson. */
   description: Scalars["String"]["input"];
+  /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: InputMaybe<Scalars["String"]["input"]>;
   sortedChapterIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  teacherId: Scalars["String"]["input"];
   title: Scalars["String"]["input"];
 };
 
@@ -456,15 +459,8 @@ export type LessonResolvers<
     ParentType,
     ContextType
   >;
-  picturePath?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   pictureUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  similarLessons?: Resolver<
-    Array<ResolversTypes["Lesson"]>,
-    ParentType,
-    ContextType
-  >;
   teacher?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
-  teacherId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   totalDuration?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   updatedAt?: Resolver<

@@ -5,11 +5,6 @@ type Question {
   correctAnswer: String!
 }
 
-type SubmitQuizResponse {
-  isValid: Boolean!
-  incorrectQuestionsId: [String!]!
-}
-
 input QuestionAnswerInput {
   questionId: String!
   answer: String!

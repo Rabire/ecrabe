@@ -1,4 +1,4 @@
-// import { getIsVideoWatchedByUser } from "../../helpers/lesson-utils";
+import { getIsVideoWatchedByUser } from "../../helpers/lesson-utils";
 import { ChapterResolvers } from "../../types/generated";
 
 const chapterResolver: ChapterResolvers = {
@@ -15,12 +15,10 @@ const chapterResolver: ChapterResolvers = {
 
     if (!userVideoProgress) return false; // user has not watched the video
 
-    return true;
-    // TODO:
-    // return getIsVideoWatchedByUser(
-    //   userVideoProgress.watchedUntil,
-    //   videoDuration
-    // );
+    return getIsVideoWatchedByUser(
+      userVideoProgress.watchedUntil,
+      videoDuration
+    );
   },
 
   isQuizCompletedByUser: async ({ id }, _args, { prisma, userId }) => {

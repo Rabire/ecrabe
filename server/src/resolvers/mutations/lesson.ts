@@ -55,7 +55,7 @@ const lessonMutationsResolvers: MutationResolvers = {
   upsertLesson: async (
     _parent,
     { lessonId, input, pictureFile },
-    { prisma, minio }
+    { prisma, minio, userId }
   ) => {
     if (!lessonId && !pictureFile) throw new Error("pictureFile missing");
 
@@ -90,6 +90,7 @@ const lessonMutationsResolvers: MutationResolvers = {
       },
       create: {
         ...restInput,
+        teacher: { connect: { id: userId } },
         picturePath: fileName || "something went verry wrong",
       },
     });
