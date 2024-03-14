@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import StudentProfile from "./components/app_component/StudentProfile";
 import Sidebar from "./components/app_component/sidebar";
 import FormationPage from "./views/FormationPage";
 import Formations from "./views/Formations";
@@ -11,6 +12,8 @@ function App() {
       <Sidebar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/students" element={<Home />} />
+        <Route path="/students/:id" element={<StudentProfile />} />
         <Route path="/formations" element={<Formations />} />
         <Route path="/formation/:id" element={<FormationPage />} />
         <Route path="/parametres" element={<Parametres />} />
