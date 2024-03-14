@@ -1,0 +1,25 @@
+overwrite: true
+schema: "src/schema/**/*.gql"
+hooks:
+  afterAllFileWrite:
+    - prettier --write ./src/types/generated.ts
+generates:
+  src/types/generated.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      mapperTypeSuffix: Model
+      mappers:
+        User: "@prisma/client#User"
+        # Comment: "@prisma/client#Comment"
+        Lesson: "@prisma/client#Lesson"
+        Chapter: "@prisma/client#Chapter"
+        Question: "@prisma/client#Question"
+      useIndexSignature: true
+      contextType: ../middleware/context#GraphQLContext
+      prettierConfig:
+        singleQuote: false
+      scalars:
+        DateTime: Date
+        Upload: graphql-upload/Upload.js#FileUpload

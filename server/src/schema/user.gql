@@ -1,0 +1,17 @@
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: Role!
+  lastLogin: DateTime!
+  firstLogin: DateTime!
+
+  # Computed
+  fullName: String!
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}

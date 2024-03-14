@@ -1,0 +1,29 @@
+type Lesson {
+  id: ID!
+  title: String!
+  description: String!
+  picturePath: String!
+  pictureUrl: String!
+  markdownContent: String
+  updatedAt: DateTime
+  totalDuration: Int!
+  "Completion percentage of lessons watch & quiz"
+  userProgress: Int!
+  similarLessons: [Lesson!]!
+
+  teacherId: String!
+
+  teacher: User!
+  chapters: [Chapter!]!
+}
+
+input LessonInput {
+  title: String!
+  description: String!
+  markdownContent: String
+  teacherId: String!
+
+  sortedChapterIds: [String!]
+}
+
+# TODO: create table LessonType

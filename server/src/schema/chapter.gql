@@ -1,0 +1,31 @@
+type Chapter {
+  id: ID!
+  order: Int!
+  title: String!
+  markdownContent: String
+  updatedAt: DateTime!
+
+  # Computed
+  videoUrl: String!
+  videoDuration: Int!
+  isQuizCompletedByUser: Boolean!
+  isVideoWatchedByUser: Boolean!
+  "Percentage of video watched by user"
+  userVideoWatchProgress: Int!
+  hasQuestions: Boolean!
+
+  # Foreing keys
+  lessonId: String!
+
+  # Relations
+  lesson: Lesson!
+  questions: [Question!]!
+  comments: [Comment!]!
+}
+
+input ChapterInput {
+  title: String!
+  markdownContent: String
+  videoDuration: Int!
+  questions: [QuestionInput!]!
+}
