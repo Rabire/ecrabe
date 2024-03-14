@@ -62,10 +62,6 @@ const lessonResolver: LessonResolvers = {
     });
   },
 
-  similarLessons: ({ id, type }, _args, { prisma }) => {
-    return prisma.lesson.findMany({ where: { type, NOT: { id } } });
-  },
-
   updatedAt: async ({ id }, _args, { prisma }) => {
     const chapters = await prisma.lesson
       .findUniqueOrThrow({ where: { id } })

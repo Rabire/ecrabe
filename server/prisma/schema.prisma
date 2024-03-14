@@ -17,12 +17,6 @@ enum Gender {
   FEMALE
 }
 
-enum LessonType {
-  ALUR
-  TUTORIAL
-  ENERGY_RENOVATION
-}
-
 model User {
   id         String   @id
   firstName  String
@@ -39,11 +33,10 @@ model User {
 }
 
 model Lesson {
-  id              String     @id @default(uuid())
+  id              String  @id @default(uuid())
   title           String
   description     String
   picturePath     String
-  type            LessonType
   markdownContent String?
 
   teacherId String
