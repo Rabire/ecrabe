@@ -22,9 +22,23 @@ type Mutation {
     input: ChapterInput!
     videoFile: Upload
   ): Chapter!
+
+  registerUser(input: RegisterInput!): UserWithTokens!
+  loginUser(email: String!, password: String!): UserWithTokens!
+  refreshToken(token: String!): Tokens!
 }
 
 type SubmitQuizResponse {
   isValid: Boolean!
   incorrectQuestionsId: [String!]!
+}
+
+type Tokens {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type UserWithTokens {
+  user: User!
+  tokens: Tokens!
 }

@@ -54,30 +54,32 @@ export type Chapter = {
   isQuizCompletedByUser: Scalars["Boolean"]["output"];
   isVideoWatchedByUser: Scalars["Boolean"]["output"];
   lesson: Lesson;
-  lessonId: Scalars["String"]["output"];
+  /** A description of the chapter content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars["String"]["output"]>;
+  /** An integer representing the order of the chapter in the lesson. */
   order: Scalars["Int"]["output"];
   questions: Array<Question>;
   title: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
   /** Percentage of video watched by user */
   userVideoWatchProgress: Scalars["Int"]["output"];
+  /** Duration of the video in seconds. */
   videoDuration: Scalars["Int"]["output"];
   videoUrl: Scalars["String"]["output"];
 };
 
 export type ChapterInput = {
+  /** A description of the chapter content or presentation - in markdown format. */
   markdownContent?: InputMaybe<Scalars["String"]["input"]>;
   questions: Array<QuestionInput>;
   title: Scalars["String"]["input"];
+  /** Duration of the video in seconds. */
   videoDuration: Scalars["Int"]["input"];
 };
 
 export type Comment = {
   __typename?: "Comment";
   author: User;
-  authorId: Scalars["String"]["output"];
-  chapter?: Maybe<Chapter>;
   content: Scalars["String"]["output"];
   createdAt: Scalars["DateTime"]["output"];
   deletedAt?: Maybe<Scalars["DateTime"]["output"]>;
@@ -115,6 +117,9 @@ export type LessonInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  loginUser: UserWithTokens;
+  refreshToken: Tokens;
+  registerUser: UserWithTokens;
   /** Upsert a user video watch progress */
   saveVideoProgress: Scalars["Boolean"]["output"];
   /** Check user responses and store them the first time it is correct */
@@ -123,6 +128,19 @@ export type Mutation = {
   upsertChapter: Chapter;
   /** Add or update a lesson */
   upsertLesson: Lesson;
+};
+
+export type MutationLoginUserArgs = {
+  email: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
+};
+
+export type MutationRefreshTokenArgs = {
+  token: Scalars["String"]["input"];
+};
+
+export type MutationRegisterUserArgs = {
+  input: RegisterInput;
 };
 
 export type MutationSaveVideoProgressArgs = {
@@ -187,6 +205,13 @@ export type QuestionInput = {
   question: Scalars["String"]["input"];
 };
 
+export type RegisterInput = {
+  email: Scalars["String"]["input"];
+  firstName: Scalars["String"]["input"];
+  lastName: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
+};
+
 export enum Role {
   Admin = "ADMIN",
   Member = "MEMBER",
@@ -198,16 +223,29 @@ export type SubmitQuizResponse = {
   isValid: Scalars["Boolean"]["output"];
 };
 
+export type Tokens = {
+  __typename?: "Tokens";
+  accessToken: Scalars["String"]["output"];
+  refreshToken: Scalars["String"]["output"];
+};
+
 export type User = {
   __typename?: "User";
   email: Scalars["String"]["output"];
   firstLogin: Scalars["DateTime"]["output"];
   firstName: Scalars["String"]["output"];
   fullName: Scalars["String"]["output"];
+  hashedPassword: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   lastLogin: Scalars["DateTime"]["output"];
   lastName: Scalars["String"]["output"];
   role: Role;
+};
+
+export type UserWithTokens = {
+  __typename?: "UserWithTokens";
+  tokens: Tokens;
+  user: User;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -324,10 +362,7 @@ export type ResolversTypes = ResolversObject<{
   Chapter: ResolverTypeWrapper<ChapterModel>;
   ChapterInput: ChapterInput;
   Comment: ResolverTypeWrapper<
-    Omit<Comment, "author" | "chapter"> & {
-      author: ResolversTypes["User"];
-      chapter?: Maybe<ResolversTypes["Chapter"]>;
-    }
+    Omit<Comment, "author"> & { author: ResolversTypes["User"] }
   >;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
@@ -339,11 +374,16 @@ export type ResolversTypes = ResolversObject<{
   Question: ResolverTypeWrapper<QuestionModel>;
   QuestionAnswerInput: QuestionAnswerInput;
   QuestionInput: QuestionInput;
+  RegisterInput: RegisterInput;
   Role: Role;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   SubmitQuizResponse: ResolverTypeWrapper<SubmitQuizResponse>;
+  Tokens: ResolverTypeWrapper<Tokens>;
   Upload: ResolverTypeWrapper<Scalars["Upload"]["output"]>;
   User: ResolverTypeWrapper<UserModel>;
+  UserWithTokens: ResolverTypeWrapper<
+    Omit<UserWithTokens, "user"> & { user: ResolversTypes["User"] }
+  >;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -351,10 +391,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"]["output"];
   Chapter: ChapterModel;
   ChapterInput: ChapterInput;
-  Comment: Omit<Comment, "author" | "chapter"> & {
-    author: ResolversParentTypes["User"];
-    chapter?: Maybe<ResolversParentTypes["Chapter"]>;
-  };
+  Comment: Omit<Comment, "author"> & { author: ResolversParentTypes["User"] };
   DateTime: Scalars["DateTime"]["output"];
   ID: Scalars["ID"]["output"];
   Int: Scalars["Int"]["output"];
@@ -365,10 +402,15 @@ export type ResolversParentTypes = ResolversObject<{
   Question: QuestionModel;
   QuestionAnswerInput: QuestionAnswerInput;
   QuestionInput: QuestionInput;
+  RegisterInput: RegisterInput;
   String: Scalars["String"]["output"];
   SubmitQuizResponse: SubmitQuizResponse;
+  Tokens: Tokens;
   Upload: Scalars["Upload"]["output"];
   User: UserModel;
+  UserWithTokens: Omit<UserWithTokens, "user"> & {
+    user: ResolversParentTypes["User"];
+  };
 }>;
 
 export type ChapterResolvers<
@@ -394,7 +436,6 @@ export type ChapterResolvers<
     ContextType
   >;
   lesson?: Resolver<ResolversTypes["Lesson"], ParentType, ContextType>;
-  lessonId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   markdownContent?: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
@@ -424,8 +465,6 @@ export type CommentResolvers<
     ResolversParentTypes["Comment"] = ResolversParentTypes["Comment"],
 > = ResolversObject<{
   author?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
-  authorId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  chapter?: Resolver<Maybe<ResolversTypes["Chapter"]>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   deletedAt?: Resolver<
@@ -477,6 +516,24 @@ export type MutationResolvers<
   ParentType extends
     ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = ResolversObject<{
+  loginUser?: Resolver<
+    ResolversTypes["UserWithTokens"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginUserArgs, "email" | "password">
+  >;
+  refreshToken?: Resolver<
+    ResolversTypes["Tokens"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationRefreshTokenArgs, "token">
+  >;
+  registerUser?: Resolver<
+    ResolversTypes["UserWithTokens"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationRegisterUserArgs, "input">
+  >;
   saveVideoProgress?: Resolver<
     ResolversTypes["Boolean"],
     ParentType,
@@ -550,6 +607,16 @@ export type SubmitQuizResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type TokensResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends
+    ResolversParentTypes["Tokens"] = ResolversParentTypes["Tokens"],
+> = ResolversObject<{
+  accessToken?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  refreshToken?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface UploadScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["Upload"], any> {
   name: "Upload";
@@ -564,10 +631,21 @@ export type UserResolvers<
   firstLogin?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   fullName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  hashedPassword?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   lastLogin?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   role?: Resolver<ResolversTypes["Role"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserWithTokensResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends
+    ResolversParentTypes["UserWithTokens"] = ResolversParentTypes["UserWithTokens"],
+> = ResolversObject<{
+  tokens?: Resolver<ResolversTypes["Tokens"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -580,6 +658,8 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Question?: QuestionResolvers<ContextType>;
   SubmitQuizResponse?: SubmitQuizResponseResolvers<ContextType>;
+  Tokens?: TokensResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
+  UserWithTokens?: UserWithTokensResolvers<ContextType>;
 }>;

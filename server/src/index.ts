@@ -8,6 +8,7 @@ import http from "http";
 import { SERVER_PORT } from "./helpers/env-variables";
 // import { handleError } from "./helpers/error-handler";
 // import createContext from "./middleware/context";
+import createContext from "./middleware/context";
 import schema from "./schema";
 
 async function startApolloServer() {
@@ -34,7 +35,7 @@ async function startApolloServer() {
       maxFileSize: 10_000_000, // 10 MB
     }),
     expressMiddleware(server, {
-      // context: async ({ req }) => await createContext(req, server.cache),
+      context: async ({ req }) => await createContext(req, server.cache),
     })
   );
 

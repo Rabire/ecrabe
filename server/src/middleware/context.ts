@@ -1,6 +1,7 @@
 import { ApolloServer, BaseContext } from "@apollo/server";
 import { PrismaClient } from "@prisma/client";
 import type { Request } from "express";
+import { verifyAccessToken } from "../helpers/jwt";
 import ExtendedMinioClient from "../services/minio";
 
 export interface GraphQLContext {
@@ -22,7 +23,7 @@ const createContext = async (
   let userId: string | undefined;
 
   try {
-    userId = "TODO:-token-user";
+    userId = verifyAccessToken(accessToken).userId;
   } catch (error) {
     userId = undefined;
   }
