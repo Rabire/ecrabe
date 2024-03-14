@@ -1,0 +1,25 @@
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: Role!
+  hashedPassword: String!
+  lastLogin: DateTime!
+  firstLogin: DateTime!
+
+  # Computed
+  fullName: String!
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+input RegisterInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+}

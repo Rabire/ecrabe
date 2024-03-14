@@ -1,0 +1,8 @@
+type Comment {
+  id: ID!
+  content: String!
+  createdAt: DateTime!
+  deletedAt: DateTime
+
+  author: User!
+}

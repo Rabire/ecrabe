@@ -1,0 +1,44 @@
+type Mutation {
+  "Check user responses and store them the first time it is correct"
+  submitQuiz(
+    chapterId: String!
+    answers: [QuestionAnswerInput!]!
+  ): SubmitQuizResponse!
+
+  "Upsert a user video watch progress"
+  saveVideoProgress(chapterId: String!, watchedUntil: Int!): Boolean!
+
+  "Add or update a lesson"
+  upsertLesson(
+    lessonId: String
+    input: LessonInput!
+    pictureFile: Upload
+  ): Lesson!
+
+  "Add or update a chapter"
+  upsertChapter(
+    lessonId: String!
+    chapterId: String
+    input: ChapterInput!
+    videoFile: Upload
+  ): Chapter!
+
+  registerUser(input: RegisterInput!): UserWithTokens!
+  loginUser(email: String!, password: String!): UserWithTokens!
+  refreshToken(token: String!): Tokens!
+}
+
+type SubmitQuizResponse {
+  isValid: Boolean!
+  incorrectQuestionsId: [String!]!
+}
+
+type Tokens {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type UserWithTokens {
+  user: User!
+  tokens: Tokens!
+}

@@ -1,0 +1,17 @@
+type Question {
+  id: ID!
+  question: String!
+  answers: [String!]!
+  correctAnswer: String!
+}
+
+input QuestionAnswerInput {
+  questionId: String!
+  answer: String!
+}
+
+input QuestionInput {
+  question: String!
+  answers: [String!]!
+  correctAnswer: String!
+}
