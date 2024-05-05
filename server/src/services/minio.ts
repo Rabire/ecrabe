@@ -4,7 +4,6 @@ import path from "path";
 import { getMimeType } from "stream-mime-type";
 import { v4 as uuidv4 } from "uuid";
 import {
-  IS_DEV,
   MINIO_ACCESS_KEY,
   MINIO_BUCKET,
   MINIO_SECRET_KEY,
@@ -13,9 +12,9 @@ import {
 class ExtendedMinioClient extends Minio.Client {
   constructor() {
     super({
-      endPoint: IS_DEV ? "minio" : "asset.ecotransac.fr",
-      port: IS_DEV ? 9000 : undefined,
-      useSSL: !IS_DEV,
+      endPoint: "minio",
+      port: 9000,
+      useSSL: false,
       accessKey: MINIO_ACCESS_KEY,
       secretKey: MINIO_SECRET_KEY,
     });
