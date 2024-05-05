@@ -6,8 +6,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import AddCourseSteps from "../components/app_component/AddCourseSteps";
 
 const FormationPage = () => {
   return (
@@ -34,16 +32,7 @@ const FormationPage = () => {
                 <MiniCoursItem />
 
                 <div className="my-4">
-                  {
-                    <Dialog>
-                      <DialogTrigger>
-                        <Button>Ajouter un cours</Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <AddCourseSteps />
-                      </DialogContent>
-                    </Dialog>
-                  }
+                  <Button>Ajouter un cours</Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
