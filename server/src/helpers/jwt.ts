@@ -3,7 +3,7 @@ import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "./env-variables";
 
 const generateAccessToken = (userId: string) => {
   return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
-    expiresIn: 60 * 10,
+    expiresIn: 60 * 60,
   });
 };
 

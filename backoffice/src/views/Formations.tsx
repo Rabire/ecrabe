@@ -1,5 +1,6 @@
 import MiniatureComponent from "@/components/app_component/MiniatureComponent";
 import { Button } from "@/components/ui/button";
+import { useLessonsQuery } from "@/types/graphql-generated";
 
 const formations = [
   {
@@ -65,6 +66,10 @@ const formations = [
 ];
 
 const Formations = () => {
+  const { data, error, loading } = useLessonsQuery();
+
+  console.log({ data, error, loading });
+
   return (
     <div className="w-4/5 p-4">
       <div className="title my-4">

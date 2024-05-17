@@ -12,7 +12,7 @@ import {
 class ExtendedMinioClient extends Minio.Client {
   constructor() {
     super({
-      endPoint: "minio",
+      endPoint: "localhost",
       port: 9000,
       useSSL: false,
       accessKey: MINIO_ACCESS_KEY,

@@ -32,7 +32,7 @@ async function startApolloServer() {
       credentials: true,
     }),
     graphqlUploadExpress({
-      maxFileSize: 10_000_000, // 10 MB
+      // maxFileSize: 10_000_000, // 10 MB
     }),
     expressMiddleware(server, {
       context: async ({ req }) => await createContext(req, server.cache),
