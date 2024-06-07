@@ -19,6 +19,7 @@ const headersLink = setContext((_, { headers }) => ({
 const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   if (graphQLErrors) {
     // Handle Errors
+    console.log(graphQLErrors.map((error) => error.message));
   }
 
   forward(operation);

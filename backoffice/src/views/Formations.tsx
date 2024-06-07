@@ -1,8 +1,8 @@
 import MiniatureComponent from "@/components/app_component/MiniatureComponent";
 import { Button } from "@/components/ui/button";
-import { useLessonsQuery } from "@/types/graphql-generated";
+import { Lesson, useLessonsQuery } from "@/types/graphql-generated";
 
-const formations = [
+/* const formations = [
   {
     id: "1",
     title: "Formation 1",
@@ -63,7 +63,7 @@ const formations = [
     description: "description 10",
     image: "https://via.placeholder.com/150",
   },
-];
+]; */
 
 const Formations = () => {
   const { data, error, loading } = useLessonsQuery();
@@ -78,9 +78,12 @@ const Formations = () => {
       <div className="my-4">
         <Button className="w-1/4">Ajouter une formation</Button>
       </div>
-      <div className="grid grid-cols-5 gap-6">
-        {formations.map((formation) => (
-          <MiniatureComponent key={formation.id} formation={formation} />
+      <div className="grid grid-cols-3 gap-6">
+        {data?.lessons.map((formation) => (
+          <MiniatureComponent
+            key={formation.id}
+            formation={formation as Lesson}
+          />
         ))}
       </div>
     </div>
