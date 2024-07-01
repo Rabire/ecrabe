@@ -17,8 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <TailwindIndicator />
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <TailwindIndicator />
+        {children}
+      </body>
     </html>
   );
 }
