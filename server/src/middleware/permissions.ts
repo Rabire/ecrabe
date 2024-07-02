@@ -43,8 +43,9 @@ const permissions = shield(
       // editComment: and(rules.isAuth, or(rules.isCommentAuthor, rules.isAdmin)),
       submitQuiz: rules.isAuth,
       saveVideoProgress: rules.isAuth,
-      upsertLesson: and(rules.isAuth, rules.isAdmin),
-      upsertChapter: and(rules.isAuth, rules.isAdmin),
+      createLesson: rules.isAuth,
+      updateLesson: rules.isAuth,
+      upsertChapter: rules.isAuth,
     },
   },
   { allowExternalErrors: true }

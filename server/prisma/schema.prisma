@@ -9,7 +9,8 @@ datasource db {
 
 enum Role {
   ADMIN
-  MEMBER
+  STUDENT
+  TEACHER
 }
 
 enum Gender {
@@ -22,7 +23,7 @@ model User {
   firstName      String
   lastName       String
   email          String   @unique
-  role           Role     @default(MEMBER)
+  role           Role     @default(STUDENT)
   lastLogin      DateTime @default(now())
   firstLogin     DateTime @default(now())
   hashedPassword String
@@ -36,8 +37,8 @@ model User {
 model Lesson {
   id              String  @id @default(uuid())
   title           String
-  description     String
-  picturePath     String
+  description     String?
+  picturePath     String?
   markdownContent String?
 
   teacherId String

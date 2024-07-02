@@ -52,12 +52,8 @@ const lessonMutationsResolvers: MutationResolvers = {
     return true;
   },
 
-  upsertLesson: async (
-    _parent,
-    { lessonId, input, pictureFile },
-    { prisma, minio, userId }
-  ) => {
-    if (!lessonId && !pictureFile) throw new Error("pictureFile missing");
+  updateLesson: async (_parent, { lessonId, input }, { prisma, minio }) => {
+    const { sortedChapterIds, pictureFile, ...restInput } = input;
 
     const id = lessonId || uuidv4();
 
@@ -72,11 +68,9 @@ const lessonMutationsResolvers: MutationResolvers = {
     if (!pictureFile && !lessonId)
       throw new Error("pictureFile is required for creation");
 
-    const { sortedChapterIds, ...restInput } = input;
-
-    const lesson = await prisma.lesson.upsert({
+    const lesson = await prisma.lesson.update({
       where: { id },
-      update: {
+      data: {
         ...restInput,
         picturePath: fileName ? fileName : undefined,
         chapters: sortedChapterIds
@@ -88,10 +82,16 @@ const lessonMutationsResolvers: MutationResolvers = {
             }
           : undefined,
       },
-      create: {
-        ...restInput,
+    });
+
+    return lesson;
+  },
+
+  createLesson: async (_parent, { title }, { prisma, minio, userId }) => {
+    const lesson = await prisma.lesson.create({
+      data: {
+        title,
         teacher: { connect: { id: userId } },
-        picturePath: fileName || "something went verry wrong",
       },
     });
 

@@ -4,7 +4,7 @@ type Lesson {
   "A short description of the lesson."
   description: String!
   "The URL of the cover picture of the lesson."
-  pictureUrl: String!
+  pictureUrl: String
   "A description of the lesson content or presentation - in markdown format."
   markdownContent: String
 
@@ -27,6 +27,8 @@ input LessonInput {
   description: String!
   "A description of the lesson content or presentation - in markdown format."
   markdownContent: String
+  "The file of the cover picture of the lesson."
+  pictureFile: Upload
 
   sortedChapterIds: [String!]
 }

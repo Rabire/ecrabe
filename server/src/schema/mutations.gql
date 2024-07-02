@@ -8,12 +8,11 @@ type Mutation {
   "Upsert a user video watch progress"
   saveVideoProgress(chapterId: String!, watchedUntil: Int!): Boolean!
 
-  "Add or update a lesson"
-  upsertLesson(
-    lessonId: String
-    input: LessonInput!
-    pictureFile: Upload
-  ): Lesson!
+  "Create a lesson"
+  createLesson(title: String!): Lesson!
+
+  "Update a lesson"
+  updateLesson(lessonId: String!, input: LessonInput!): Lesson!
 
   "Add or update a chapter"
   upsertChapter(

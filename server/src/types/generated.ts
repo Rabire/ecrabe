@@ -95,7 +95,7 @@ export type Lesson = {
   /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars["String"]["output"]>;
   /** The URL of the cover picture of the lesson. */
-  pictureUrl: Scalars["String"]["output"];
+  pictureUrl?: Maybe<Scalars["String"]["output"]>;
   teacher: User;
   title: Scalars["String"]["output"];
   /** Duration of the lesson in seconds. */
@@ -111,12 +111,16 @@ export type LessonInput = {
   description: Scalars["String"]["input"];
   /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: InputMaybe<Scalars["String"]["input"]>;
+  /** The file of the cover picture of the lesson. */
+  pictureFile?: InputMaybe<Scalars["Upload"]["input"]>;
   sortedChapterIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
   title: Scalars["String"]["input"];
 };
 
 export type Mutation = {
   __typename?: "Mutation";
+  /** Create a lesson */
+  createLesson: Lesson;
   loginUser: UserWithTokens;
   refreshToken: Tokens;
   registerUser: UserWithTokens;
@@ -124,10 +128,14 @@ export type Mutation = {
   saveVideoProgress: Scalars["Boolean"]["output"];
   /** Check user responses and store them the first time it is correct */
   submitQuiz: SubmitQuizResponse;
+  /** Update a lesson */
+  updateLesson: Lesson;
   /** Add or update a chapter */
   upsertChapter: Chapter;
-  /** Add or update a lesson */
-  upsertLesson: Lesson;
+};
+
+export type MutationCreateLessonArgs = {
+  title: Scalars["String"]["input"];
 };
 
 export type MutationLoginUserArgs = {
@@ -153,17 +161,16 @@ export type MutationSubmitQuizArgs = {
   chapterId: Scalars["String"]["input"];
 };
 
+export type MutationUpdateLessonArgs = {
+  input: LessonInput;
+  lessonId: Scalars["String"]["input"];
+};
+
 export type MutationUpsertChapterArgs = {
   chapterId?: InputMaybe<Scalars["String"]["input"]>;
   input: ChapterInput;
   lessonId: Scalars["String"]["input"];
   videoFile?: InputMaybe<Scalars["Upload"]["input"]>;
-};
-
-export type MutationUpsertLessonArgs = {
-  input: LessonInput;
-  lessonId?: InputMaybe<Scalars["String"]["input"]>;
-  pictureFile?: InputMaybe<Scalars["Upload"]["input"]>;
 };
 
 export type Query = {
@@ -498,7 +505,11 @@ export type LessonResolvers<
     ParentType,
     ContextType
   >;
-  pictureUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  pictureUrl?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
   teacher?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   totalDuration?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -516,6 +527,12 @@ export type MutationResolvers<
   ParentType extends
     ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = ResolversObject<{
+  createLesson?: Resolver<
+    ResolversTypes["Lesson"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateLessonArgs, "title">
+  >;
   loginUser?: Resolver<
     ResolversTypes["UserWithTokens"],
     ParentType,
@@ -546,17 +563,17 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationSubmitQuizArgs, "answers" | "chapterId">
   >;
+  updateLesson?: Resolver<
+    ResolversTypes["Lesson"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateLessonArgs, "input" | "lessonId">
+  >;
   upsertChapter?: Resolver<
     ResolversTypes["Chapter"],
     ParentType,
     ContextType,
     RequireFields<MutationUpsertChapterArgs, "input" | "lessonId">
-  >;
-  upsertLesson?: Resolver<
-    ResolversTypes["Lesson"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpsertLessonArgs, "input">
   >;
 }>;
 
