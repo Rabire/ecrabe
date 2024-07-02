@@ -1,0 +1,7 @@
+mutation UpsertLesson($input: LessonInput!, $pictureFile: Upload) {
+  upsertLesson(input: $input, pictureFile: $pictureFile) {
+    markdownContent
+    title
+    description
+  }
+}

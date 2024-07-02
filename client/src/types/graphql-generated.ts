@@ -246,6 +246,14 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'UserWithTokens', tokens: { __typename?: 'Tokens', accessToken: string, refreshToken: string }, user: { __typename?: 'User', fullName: string, id: string } } };
 
+export type UpsertLessonMutationVariables = Exact<{
+  input: LessonInput;
+  pictureFile?: InputMaybe<Scalars['Upload']['input']>;
+}>;
+
+
+export type UpsertLessonMutation = { __typename?: 'Mutation', upsertLesson: { __typename?: 'Lesson', markdownContent?: string | null, title: string, description: string } };
+
 
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
@@ -327,3 +335,39 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpsertLessonDocument = gql`
+    mutation UpsertLesson($input: LessonInput!, $pictureFile: Upload) {
+  upsertLesson(input: $input, pictureFile: $pictureFile) {
+    markdownContent
+    title
+    description
+  }
+}
+    `;
+export type UpsertLessonMutationFn = Apollo.MutationFunction<UpsertLessonMutation, UpsertLessonMutationVariables>;
+
+/**
+ * __useUpsertLessonMutation__
+ *
+ * To run a mutation, you first call `useUpsertLessonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpsertLessonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upsertLessonMutation, { data, loading, error }] = useUpsertLessonMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      pictureFile: // value for 'pictureFile'
+ *   },
+ * });
+ */
+export function useUpsertLessonMutation(baseOptions?: Apollo.MutationHookOptions<UpsertLessonMutation, UpsertLessonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpsertLessonMutation, UpsertLessonMutationVariables>(UpsertLessonDocument, options);
+      }
+export type UpsertLessonMutationHookResult = ReturnType<typeof useUpsertLessonMutation>;
+export type UpsertLessonMutationResult = Apollo.MutationResult<UpsertLessonMutation>;
+export type UpsertLessonMutationOptions = Apollo.BaseMutationOptions<UpsertLessonMutation, UpsertLessonMutationVariables>;
