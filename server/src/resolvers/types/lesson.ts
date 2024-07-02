@@ -3,8 +3,9 @@ import { LessonResolvers } from "../../types/generated";
 
 const lessonResolver: LessonResolvers = {
   pictureUrl: async ({ picturePath }, _, { minio }) => {
-    const url = await minio.getFileUrl(picturePath);
+    if (!picturePath) return null;
 
+    const url = await minio.getFileUrl(picturePath);
     return url;
   },
 
