@@ -24,7 +24,7 @@ interface LessonLayoutProps {
   children: React.ReactNode;
 }
 
-export default function SettingsLayout({ children }: LessonLayoutProps) {
+export default function LessonLayout({ children }: LessonLayoutProps) {
   return (
     <>
       <div className="space-y-6 p-10 pb-16">
