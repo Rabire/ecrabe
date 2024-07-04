@@ -1,0 +1,5 @@
+mutation UpdateLesson($lessonId: String!, $input: LessonInput!) {
+  updateLesson(lessonId: $lessonId, input: $input) {
+    id
+  }
+}
