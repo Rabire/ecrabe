@@ -143,10 +143,6 @@ export type MutationLoginUserArgs = {
   password: Scalars["String"]["input"];
 };
 
-export type MutationRefreshTokenArgs = {
-  token: Scalars["String"]["input"];
-};
-
 export type MutationRegisterUserArgs = {
   input: RegisterInput;
 };
@@ -221,7 +217,8 @@ export type RegisterInput = {
 
 export enum Role {
   Admin = "ADMIN",
-  Member = "MEMBER",
+  Student = "STUDENT",
+  Teacher = "TEACHER",
 }
 
 export type SubmitQuizResponse = {
@@ -539,12 +536,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationLoginUserArgs, "email" | "password">
   >;
-  refreshToken?: Resolver<
-    ResolversTypes["Tokens"],
-    ParentType,
-    ContextType,
-    RequireFields<MutationRefreshTokenArgs, "token">
-  >;
+  refreshToken?: Resolver<ResolversTypes["Tokens"], ParentType, ContextType>;
   registerUser?: Resolver<
     ResolversTypes["UserWithTokens"],
     ParentType,

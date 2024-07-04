@@ -1,4 +1,5 @@
 "use client";
+
 import UpsertLessonForm from "@/components/upsert-lesson-form";
 import apolloClient from "@/lib/apollo-client";
 import { ApolloProvider } from "@apollo/client";

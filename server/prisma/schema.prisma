@@ -9,8 +9,8 @@ datasource db {
 
 enum Role {
   ADMIN
-  STUDENT
   TEACHER
+  STUDENT
 }
 
 enum Gender {

@@ -1,9 +1,9 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useRegisterMutation } from "@/src/types/graphql-generated";
+import { setTokens } from "@/store/access-token";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TextField from "./form-field/text-field";
@@ -41,7 +41,7 @@ const schema = z
         path: ["confirmPassword"],
       });
     }
-  });
+  }); // TODO: export schema to a new file
 
 type FormSchema = z.infer<typeof schema>;
 
@@ -50,18 +50,25 @@ const RegisterForm = () => {
     resolver: zodResolver(schema),
   });
 
+  const router = useRouter();
+
   const [register, { loading }] = useRegisterMutation({
     onError: () => null, // TODO: error toast
-    onCompleted: () => {
+    onCompleted: ({ registerUser }) => {
+      console.log({ registerUser });
+      setTokens(
+        registerUser.tokens.accessToken,
+        registerUser.tokens.refreshToken
+      );
+      router.push(`/${registerUser.user.role.toLocaleLowerCase()}`);
       // TODO: success toast
-      // TODO: redirect
     },
   });
 
-  async function onSubmit(formValues: FormSchema) {
-    const { confirmPassword, ...inputs } = formValues;
-    register({ variables: { input: inputs } });
-  }
+  const onSubmit = (formValues: FormSchema) => {
+    const { confirmPassword, ...rest } = formValues;
+    register({ variables: { input: rest } });
+  };
 
   return (
     <Form {...form}>

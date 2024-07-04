@@ -8,6 +8,7 @@ export interface GraphQLContext {
   userId: string | undefined;
   prisma: PrismaClient;
   minio: ExtendedMinioClient;
+  req: Request;
 }
 
 const prisma = new PrismaClient();
@@ -34,6 +35,7 @@ const createContext = async (
     userId,
     prisma,
     minio,
+    req,
   };
 };
 

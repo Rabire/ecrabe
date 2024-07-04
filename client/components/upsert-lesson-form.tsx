@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useUpdateLessonMutation } from "@/src/types/graphql-generated";
@@ -25,13 +23,9 @@ const UpsertLessonForm = () => {
     resolver: zodResolver(schema),
   });
 
-  console.log(form.formState.errors);
   const [upsert, { loading }] = useUpdateLessonMutation({
     onError: () => null, // TODO: error toast
-    onCompleted: () => {
-      // TODO: success toast
-      // TODO: redirect
-    },
+    onCompleted: () => null, // TODO: success toast
   });
 
   async function onSubmit(formValues: FormSchema) {
