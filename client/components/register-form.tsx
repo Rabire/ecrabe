@@ -55,10 +55,9 @@ const RegisterForm = () => {
   const [register, { loading }] = useRegisterMutation({
     onError: () => null, // TODO: error toast
     onCompleted: ({ registerUser }) => {
-      console.log({ registerUser });
       setTokens(
         registerUser.tokens.accessToken,
-        registerUser.tokens.refreshToken
+        registerUser.tokens.refreshToken,
       );
       router.push(`/${registerUser.user.role.toLocaleLowerCase()}`);
       // TODO: success toast
@@ -66,6 +65,7 @@ const RegisterForm = () => {
   });
 
   const onSubmit = (formValues: FormSchema) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...rest } = formValues;
     register({ variables: { input: rest } });
   };

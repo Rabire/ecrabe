@@ -10,7 +10,7 @@ export default function AuthenticationPage() {
   const [formState, setFormState] = useState<"login" | "register">("login");
 
   return (
-    <main className="container relative  h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <main className="container relative grid h-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
       <Button
         className="absolute right-4 top-4 md:right-8 md:top-8"
         variant="ghost"
@@ -21,7 +21,7 @@ export default function AuthenticationPage() {
         {formState === "login" ? "Créer un compte" : "Se connecter"}
       </Button>
 
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-zinc-900" />
 
         <div className="relative z-20 flex items-center text-lg font-medium">

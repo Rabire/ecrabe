@@ -6,6 +6,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import FormFieldProps from "@/lib/types";
 import { HTMLInputTypeAttribute } from "react";
 import { useFormContext } from "react-hook-form";
 import { Input } from "../ui/input";

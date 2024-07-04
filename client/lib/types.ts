@@ -5,3 +5,5 @@ type FormFieldProps = {
   placeholder?: string;
   description?: string;
 };
+
+export default FormFieldProps;

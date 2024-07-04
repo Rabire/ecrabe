@@ -8,11 +8,12 @@ import { z } from "zod";
 import FileField from "./form-field/file-field";
 import TextField from "./form-field/text-field";
 import TextAreaField from "./form-field/textarea-field";
+
 const schema = z.object({
   description: z.string(),
   title: z.string(),
   markdownContent: z.string(),
-  //pictureFile: z.instanceof(File).optional(),
+  // pictureFile: z.instanceof(File).optional(),
 });
 
 type FormSchema = z.infer<typeof schema>;

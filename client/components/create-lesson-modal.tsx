@@ -1,5 +1,3 @@
-const createLessonModal = () => {
-  return <div>createLessonModal</div>;
-};
+const createLessonModal = () => <div>createLessonModal</div>;
 
 export default createLessonModal;

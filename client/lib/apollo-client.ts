@@ -23,7 +23,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 
   // TODO: handle token refresh
   const isTokenInvalid = graphQLErrors?.some(
-    (error) => error.message === "Invalid token"
+    (error) => error.message === "Invalid token",
   );
 
   if (isTokenInvalid) {
@@ -36,7 +36,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
 
           setTokens(
             data.refreshToken.accessToken,
-            data.refreshToken.refreshToken
+            data.refreshToken.refreshToken,
           );
 
           // Modify the operation context with a new token

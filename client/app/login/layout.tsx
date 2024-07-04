@@ -7,8 +7,8 @@ import React from "react";
 interface TeacherLayoutProps {
   children: React.ReactNode;
 }
-const TeacherLayout = ({ children }: TeacherLayoutProps) => {
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
-};
+const TeacherLayout = ({ children }: TeacherLayoutProps) => (
+  <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+);
 
 export default TeacherLayout;

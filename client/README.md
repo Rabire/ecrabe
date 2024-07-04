@@ -8,3 +8,5 @@
     /students (mes etudiants)
 /profile:id?tab=general tabs = general billing (modifier son profil)
 ```
+
+TODO: Add CI-CD to prevent merging a PR with build or lint errors

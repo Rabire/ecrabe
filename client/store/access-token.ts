@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 export const $accessToken = persistentAtom<string | null>(
   "access-token",
   null,
-  { encode: JSON.stringify, decode: JSON.parse }
+  { encode: JSON.stringify, decode: JSON.parse },
 );
 
 const cookies = new Cookies(null, { path: "/" });
