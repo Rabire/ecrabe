@@ -59,7 +59,8 @@ const RegisterForm = () => {
   });
 
   async function onSubmit(formValues: FormSchema) {
-    register({ variables: { input: formValues } });
+    const { confirmPassword, ...inputs } = formValues;
+    register({ variables: { input: inputs } });
   }
 
   return (

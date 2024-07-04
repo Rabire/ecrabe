@@ -1,0 +1,36 @@
+query Lesson($lessonId: ID) {
+  lesson(lessonId: $lessonId) {
+    id
+    chapters {
+      title
+      markdownContent
+      updatedAt
+      videoDuration
+      videoUrl
+      questions {
+        correctAnswer
+        answers
+        id
+        question
+      }
+      order
+      id
+      hasQuestions
+      comments {
+        id
+        createdAt
+        content
+        author {
+          id
+          fullName
+        }
+      }
+    }
+    markdownContent
+    description
+    pictureUrl
+    title
+    totalDuration
+    updatedAt
+  }
+}

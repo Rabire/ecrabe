@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useUpsertLessonMutation } from "@/src/types/graphql-generated";
+import { useUpdateLessonMutation } from "@/src/types/graphql-generated";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FileField from "./form-field/file-field";
 import TextField from "./form-field/text-field";
 import TextAreaField from "./form-field/textarea-field";
-
 const schema = z.object({
   description: z.string(),
   title: z.string(),
@@ -20,12 +20,13 @@ const schema = z.object({
 type FormSchema = z.infer<typeof schema>;
 
 const UpsertLessonForm = () => {
+  const { id } = useParams();
   const form = useForm<FormSchema>({
     resolver: zodResolver(schema),
   });
 
   console.log(form.formState.errors);
-  const [upsert, { loading }] = useUpsertLessonMutation({
+  const [upsert, { loading }] = useUpdateLessonMutation({
     onError: () => null, // TODO: error toast
     onCompleted: () => {
       // TODO: success toast
@@ -34,7 +35,7 @@ const UpsertLessonForm = () => {
   });
 
   async function onSubmit(formValues: FormSchema) {
-    upsert({ variables: { input: { ...formValues } } });
+    upsert({ variables: { lessonId: id as string, input: { ...formValues } } });
   }
 
   return (
