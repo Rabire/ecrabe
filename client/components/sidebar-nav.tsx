@@ -1,5 +1,3 @@
-"use client";
-
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -12,7 +10,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   }[];
 }
 
-export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
+const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
   const pathName = usePathname();
   const { id } = useParams();
 
@@ -20,7 +18,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
     <nav
       className={cn(
         "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className
+        className,
       )}
       {...props}
     >
@@ -33,7 +31,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             pathName.includes(item.href)
               ? "bg-muted hover:bg-muted"
               : "hover:bg-transparent hover:underline",
-            "justify-start"
+            "justify-start",
           )}
         >
           {item.title}
@@ -41,4 +39,6 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       ))}
     </nav>
   );
-}
+};
+
+export default SidebarNav;

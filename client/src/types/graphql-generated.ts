@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as Apollo from "@apollo/client";
 import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -14,7 +14,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 };
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never };
 export type Incremental<T> =
   | T
@@ -130,10 +130,6 @@ export type MutationLoginUserArgs = {
   password: Scalars["String"]["input"];
 };
 
-export type MutationRefreshTokenArgs = {
-  token: Scalars["String"]["input"];
-};
-
 export type MutationRegisterUserArgs = {
   input: RegisterInput;
 };
@@ -208,8 +204,8 @@ export type RegisterInput = {
 
 export enum Role {
   Admin = "ADMIN",
-  Member = "MEMBER",
   Student = "STUDENT",
+  Teacher = "TEACHER",
 }
 
 export type SubmitQuizResponse = {
@@ -257,7 +253,7 @@ export type LoginMutation = {
       accessToken: string;
       refreshToken: string;
     };
-    user: { __typename?: "User"; fullName: string; role: Role };
+    user: { __typename?: "User"; role: Role };
   };
 };
 
@@ -274,7 +270,7 @@ export type RegisterMutation = {
       accessToken: string;
       refreshToken: string;
     };
-    user: { __typename?: "User"; fullName: string; id: string };
+    user: { __typename?: "User"; role: Role };
   };
 };
 
@@ -348,7 +344,6 @@ export const LoginDocument = gql`
         refreshToken
       }
       user {
-        fullName
         role
       }
     }
@@ -381,12 +376,12 @@ export function useLoginMutation(
   baseOptions?: Apollo.MutationHookOptions<
     LoginMutation,
     LoginMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<LoginMutation, LoginMutationVariables>(
     LoginDocument,
-    options
+    options,
   );
 }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
@@ -403,8 +398,7 @@ export const RegisterDocument = gql`
         refreshToken
       }
       user {
-        fullName
-        id
+        role
       }
     }
   }
@@ -435,12 +429,12 @@ export function useRegisterMutation(
   baseOptions?: Apollo.MutationHookOptions<
     RegisterMutation,
     RegisterMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(
     RegisterDocument,
-    options
+    options,
   );
 }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
@@ -483,7 +477,7 @@ export function useCreateLessonMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateLessonMutation,
     CreateLessonMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -556,40 +550,25 @@ export const LessonDocument = gql`
  * });
  */
 export function useLessonQuery(
-  baseOptions?: Apollo.QueryHookOptions<LessonQuery, LessonQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<LessonQuery, LessonQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<LessonQuery, LessonQueryVariables>(
     LessonDocument,
-    options
+    options,
   );
 }
 export function useLessonLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<LessonQuery, LessonQueryVariables>
+  baseOptions?: Apollo.LazyQueryHookOptions<LessonQuery, LessonQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<LessonQuery, LessonQueryVariables>(
     LessonDocument,
-    options
-  );
-}
-export function useLessonSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    LessonQuery,
-    LessonQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LessonQuery, LessonQueryVariables>(
-    LessonDocument,
-    options
+    options,
   );
 }
 export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
-export type LessonSuspenseQueryHookResult = ReturnType<
-  typeof useLessonSuspenseQuery
->;
 export type LessonQueryResult = Apollo.QueryResult<
   LessonQuery,
   LessonQueryVariables
@@ -628,7 +607,7 @@ export function useUpdateLessonMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateLessonMutation,
     UpdateLessonMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<

@@ -1,10 +1,9 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useLoginMutation } from "@/src/types/graphql-generated";
+import { setTokens } from "@/store/access-token";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TextField from "./form-field/text-field";
@@ -22,19 +21,13 @@ const LoginForm = () => {
   });
 
   const router = useRouter();
+
   const [login, { loading }] = useLoginMutation({
-    onError: (error) => console.log("error login", error), // TODO: error toast
-    onCompleted: (data) => {
-      console.log("login success", data);
-      localStorage.setItem("accessToken", data.loginUser.tokens.accessToken);
-      localStorage.setItem("refreshToken", data.loginUser.tokens.refreshToken);
-      if (data.loginUser.user.role === "STUDENT") {
-        router.push("/student");
-      } else {
-        router.push("/teacher");
-      }
+    onError: () => null, // TODO: error toast
+    onCompleted: ({ loginUser }) => {
+      setTokens(loginUser.tokens.accessToken, loginUser.tokens.refreshToken);
+      router.push(`/${loginUser.user.role.toLocaleLowerCase()}`);
       // TODO: success toast
-      // TODO: redirect
     },
   });
 

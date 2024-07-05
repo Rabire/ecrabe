@@ -23,8 +23,10 @@ type Mutation {
   ): Chapter!
 
   registerUser(input: RegisterInput!): UserWithTokens!
+
   loginUser(email: String!, password: String!): UserWithTokens!
-  refreshToken(token: String!): Tokens!
+
+  refreshToken: Tokens!
 }
 
 type SubmitQuizResponse {

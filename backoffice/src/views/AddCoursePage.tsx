@@ -35,6 +35,7 @@ const AddCoursePage = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
   return (
     <div className="w-4/5 p-4 h-[100vh] overflow-y-auto">
       <h1 className="text-2xl font-bold">Ajouter un cours</h1>

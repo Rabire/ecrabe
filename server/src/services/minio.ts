@@ -15,8 +15,8 @@ class ExtendedMinioClient extends Minio.Client {
       endPoint: "localhost",
       port: 9000,
       useSSL: false,
-      accessKey: MINIO_ACCESS_KEY,
-      secretKey: MINIO_SECRET_KEY,
+      accessKey: MINIO_ACCESS_KEY || "MINIO_ACCESS_KEY",
+      secretKey: MINIO_SECRET_KEY || "MINIO_SECRET_KEY",
     });
   }
 
@@ -39,10 +39,16 @@ class ExtendedMinioClient extends Minio.Client {
 
       const name = `${fileId || uuidv4()}${ext}`;
 
-      await this.putObject(MINIO_BUCKET, name, createReadStream(), undefined, {
-        "Content-Type": mime,
-        "Content-Encoding": encoding,
-      });
+      await this.putObject(
+        MINIO_BUCKET || "MINIO_BUCKET",
+        name,
+        createReadStream(),
+        undefined,
+        {
+          "Content-Type": mime,
+          "Content-Encoding": encoding,
+        }
+      );
 
       return name;
     } catch (error) {
@@ -53,7 +59,11 @@ class ExtendedMinioClient extends Minio.Client {
   }
 
   async getFileUrl(path: string) {
-    const fileUrl = await this.presignedGetObject(MINIO_BUCKET, path, 86400); // 24h
+    const fileUrl = await this.presignedGetObject(
+      MINIO_BUCKET || "MINIO_BUCKET",
+      path,
+      86400
+    ); // 24h
 
     if (!fileUrl) throw new Error("Error processing file url.");
 

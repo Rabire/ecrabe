@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useUpdateLessonMutation } from "@/src/types/graphql-generated";
@@ -10,11 +8,12 @@ import { z } from "zod";
 import FileField from "./form-field/file-field";
 import TextField from "./form-field/text-field";
 import TextAreaField from "./form-field/textarea-field";
+
 const schema = z.object({
   description: z.string(),
   title: z.string(),
   markdownContent: z.string(),
-  //pictureFile: z.instanceof(File).optional(),
+  // pictureFile: z.instanceof(File).optional(),
 });
 
 type FormSchema = z.infer<typeof schema>;
@@ -25,13 +24,9 @@ const UpsertLessonForm = () => {
     resolver: zodResolver(schema),
   });
 
-  console.log(form.formState.errors);
   const [upsert, { loading }] = useUpdateLessonMutation({
     onError: () => null, // TODO: error toast
-    onCompleted: () => {
-      // TODO: success toast
-      // TODO: redirect
-    },
+    onCompleted: () => null, // TODO: success toast
   });
 
   async function onSubmit(formValues: FormSchema) {

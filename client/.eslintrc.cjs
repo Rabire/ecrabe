@@ -1,0 +1,42 @@
+module.exports = {
+  root: true,
+  env: { browser: true, es2020: true },
+  extends: [
+    "airbnb",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier",
+    "plugin:react/jsx-runtime",
+  ],
+  ignorePatterns: ["dist", ".eslintrc.cjs"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["react-refresh", "prettier"],
+  settings: {
+    "import/resolver": {
+      typescript: {},
+    },
+  },
+  rules: {
+    "react-hooks/exhaustive-deps": "off",
+    "react-refresh/only-export-components": [
+      "warn",
+      { allowConstantExport: true },
+    ],
+    "react-refresh/only-export-components": "off",
+    "react/require-default-props": "off",
+    "import/extensions": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }],
+    "consistent-return": "off",
+    "no-console": ["warn", { allow: ["info", "warn", "error"] }],
+    "react/prop-types": "off",
+    "no-use-before-define": "off",
+    "react/jsx-no-constructed-context-values": "off",
+    "react/button-has-type": "off",
+    "react/no-unused-prop-types": "off",
+    "import/no-unresolved": "off",
+    "import/order": "off",
+  },
+};

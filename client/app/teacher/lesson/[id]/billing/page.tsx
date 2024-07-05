@@ -1,5 +1,3 @@
-const LessonBilling = () => {
-  return <div>LessonBilling</div>;
-};
+const LessonBilling = () => <div>LessonBilling</div>;
 
 export default LessonBilling;

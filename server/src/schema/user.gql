@@ -14,7 +14,8 @@ type User {
 
 enum Role {
   ADMIN
-  MEMBER
+  TEACHER
+  STUDENT
 }
 
 input RegisterInput {
