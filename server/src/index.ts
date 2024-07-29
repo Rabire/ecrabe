@@ -5,7 +5,7 @@ import cors from "cors";
 import express from "express";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.js";
 import http from "http";
-import { SERVER_PORT } from "./helpers/env-variables";
+import { PORT } from "./helpers/env-variables";
 // import { handleError } from "./helpers/error-handler";
 // import createContext from "./middleware/context";
 import createContext from "./middleware/context";
@@ -40,12 +40,10 @@ async function startApolloServer() {
   );
 
   await new Promise<void>((resolve) =>
-    httpServer.listen({ port: SERVER_PORT }, resolve)
+    httpServer.listen({ port: PORT }, resolve)
   );
 
-  console.info(
-    `🚀 Graphql server listening at http://localhost:${SERVER_PORT}/`
-  );
+  console.info(`🚀 Graphql server listening at http://localhost:${PORT}/`);
 }
 
 startApolloServer();

@@ -4,7 +4,7 @@ dotenv.config();
 
 export const IS_DEV = process.env.NODE_ENV === "development";
 
-export const SERVER_PORT = process.env.SERVER_PORT;
+export const PORT = process.env.PORT;
 
 export const MINIO_BUCKET = process.env.MINIO_BUCKET;
 export const MINIO_ACCESS_KEY = process.env.MINIO_ACCESS_KEY;
