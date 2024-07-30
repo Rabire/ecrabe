@@ -87,7 +87,7 @@ const lessonMutationsResolvers: MutationResolvers = {
     return lesson;
   },
 
-  createLesson: async (_parent, { title }, { prisma, minio, userId }) => {
+  createLesson: async (_parent, { title }, { prisma, userId }) => {
     const lesson = await prisma.lesson.create({
       data: {
         title,
