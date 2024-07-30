@@ -90,7 +90,7 @@ export type Lesson = {
   __typename?: "Lesson";
   chapters: Array<Chapter>;
   /** A short description of the lesson. */
-  description: Scalars["String"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
   /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars["String"]["output"]>;
@@ -108,7 +108,7 @@ export type Lesson = {
 
 export type LessonInput = {
   /** The URL of the cover picture of the lesson. */
-  description: Scalars["String"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: InputMaybe<Scalars["String"]["input"]>;
   /** The file of the cover picture of the lesson. */
@@ -177,6 +177,8 @@ export type Query = {
   lesson?: Maybe<Lesson>;
   /** Retrieves all lessons */
   lessons: Array<Lesson>;
+  /** Retrieves a single user by id */
+  user?: Maybe<User>;
   /** Retrieves all users */
   users: Array<User>;
 };
@@ -187,6 +189,10 @@ export type QueryChapterArgs = {
 
 export type QueryLessonArgs = {
   lessonId?: InputMaybe<Scalars["ID"]["input"]>;
+};
+
+export type QueryUserArgs = {
+  userId?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type Question = {
@@ -243,6 +249,7 @@ export type User = {
   id: Scalars["ID"]["output"];
   lastLogin: Scalars["DateTime"]["output"];
   lastName: Scalars["String"]["output"];
+  lessons: Array<Lesson>;
   role: Role;
 };
 
@@ -495,7 +502,11 @@ export type LessonResolvers<
     ParentType,
     ContextType
   >;
-  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   markdownContent?: Resolver<
     Maybe<ResolversTypes["String"]>,
@@ -587,6 +598,12 @@ export type QueryResolvers<
     Partial<QueryLessonArgs>
   >;
   lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
+  user?: Resolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType,
+    Partial<QueryUserArgs>
+  >;
   users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 }>;
 
@@ -644,6 +661,7 @@ export type UserResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   lastLogin?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes["Role"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

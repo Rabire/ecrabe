@@ -1,5 +1,5 @@
 import { Role } from "@prisma/client";
-import { and, rule, shield } from "graphql-shield";
+import { rule, shield } from "graphql-shield";
 import { GraphQLContext } from "./context";
 
 const rules = {
@@ -29,6 +29,13 @@ const rules = {
       return true;
     }
   ),
+
+  isCurrentUser: rule()(
+    async (_parent, { userId: userIdParam }, { userId }: GraphQLContext) => {
+      if (userId !== userIdParam) return "User is not the current user";
+      return true;
+    }
+  ),
 };
 
 const permissions = shield(
@@ -37,7 +44,8 @@ const permissions = shield(
       lessons: rules.isAuth,
       lesson: rules.isAuth,
       chapter: rules.isAuth,
-      users: and(rules.isAuth, rules.isAdmin),
+      users: rules.isAdmin,
+      user: rules.isCurrentUser,
     },
     Mutation: {
       // editComment: and(rules.isAuth, or(rules.isCommentAuthor, rules.isAdmin)),

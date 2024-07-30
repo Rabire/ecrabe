@@ -8,6 +8,9 @@ type User {
   lastLogin: DateTime!
   firstLogin: DateTime!
 
+  # Relations
+  lessons: [Lesson!]!
+
   # Computed
   fullName: String!
 }
