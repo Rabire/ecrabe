@@ -2,7 +2,7 @@ type Lesson {
   id: ID!
   title: String!
   "A short description of the lesson."
-  description: String!
+  description: String
   "The URL of the cover picture of the lesson."
   pictureUrl: String
   "A description of the lesson content or presentation - in markdown format."
@@ -24,7 +24,7 @@ type Lesson {
 input LessonInput {
   title: String!
   "The URL of the cover picture of the lesson."
-  description: String!
+  description: String
   "A description of the lesson content or presentation - in markdown format."
   markdownContent: String
   "The file of the cover picture of the lesson."

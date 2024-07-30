@@ -90,7 +90,7 @@ export type Lesson = {
   __typename?: "Lesson";
   chapters: Array<Chapter>;
   /** A short description of the lesson. */
-  description: Scalars["String"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
   /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars["String"]["output"]>;
@@ -108,7 +108,7 @@ export type Lesson = {
 
 export type LessonInput = {
   /** The URL of the cover picture of the lesson. */
-  description: Scalars["String"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: InputMaybe<Scalars["String"]["input"]>;
   /** The file of the cover picture of the lesson. */
@@ -495,7 +495,11 @@ export type LessonResolvers<
     ParentType,
     ContextType
   >;
-  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  description?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   markdownContent?: Resolver<
     Maybe<ResolversTypes["String"]>,
