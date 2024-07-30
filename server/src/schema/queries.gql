@@ -12,5 +12,5 @@ type Query {
   users: [User!]!
 
   "Retrieves a single user by id, if no id is provided, it will return the current user"
-  user(userId: String): User
+  user(userId: String): User!
 }
