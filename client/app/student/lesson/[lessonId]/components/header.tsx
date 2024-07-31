@@ -22,14 +22,8 @@ const LessonHeader = ({ lesson }: Props) => (
       />
 
       <CardHeader className="space-y-4">
-        <CardTitle>
-          {lesson.title}
-          {/* {lesson?.title || <TextLoader />} */}
-        </CardTitle>
-        <CardDescription>
-          {lesson.description}
-          {/* {lesson?.description || <TextLoader charLength={115} />} */}
-        </CardDescription>
+        <CardTitle>{lesson.title}</CardTitle>
+        <CardDescription>{lesson.description}</CardDescription>
 
         <Button asChild>
           <Link href="/#" className="mr-auto">

@@ -78,3 +78,9 @@
     @apply h-full w-full bg-accent object-cover;
   }
 }
+
+@layer utilities {
+  .error {
+    @apply text-center italic text-destructive;
+  }
+}
