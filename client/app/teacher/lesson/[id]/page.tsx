@@ -1,15 +1,32 @@
 "use client";
 
 import UpsertLessonForm from "@/components/upsert-lesson-form";
-import apolloClient from "@/lib/apollo-client";
-import { ApolloProvider } from "@apollo/client";
+import { useGetLessonByIdQuery } from "@/src/types/graphql-generated";
+import { useParams, useSearchParams } from "next/navigation";
+import LessonBilling from "./billing/billing";
+import LessonChapters from "./chapters/chapters";
+import LessonStudents from "./students/students";
 
-const LessonInfo = () => (
-  <ApolloProvider client={apolloClient}>
+const LessonInfo = () => {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
+  const params = useParams<{ id: string }>();
+
+  const { data, loading } = useGetLessonByIdQuery({
+    variables: { lessonId: params.id },
+  });
+  if (!data) return null;
+  return (
     <main>
-      <UpsertLessonForm />
+      {loading && <p>loading...</p>}
+      {tab === "students" && <LessonStudents />}
+      {tab === "chapters" && <LessonChapters lessonData={data} />}
+      {tab === "billing" && <LessonBilling />}
+      {(tab === "home" || tab === "" || !tab) && (
+        <UpsertLessonForm lessonData={data} />
+      )}
     </main>
-  </ApolloProvider>
-);
+  );
+};
 
 export default LessonInfo;

@@ -1,36 +1,41 @@
-query Lesson($lessonId: String!) {
+query TeacherLessonsPage($lessonId: String!) {
   lesson(lessonId: $lessonId) {
-    id
     chapters {
+      id
+      order
       title
       markdownContent
       updatedAt
-      videoDuration
       videoUrl
+      videoDuration
+      isQuizCompletedByUser
+      isVideoWatchedByUser
+      userVideoWatchProgress
+      hasQuestions
       questions {
-        correctAnswer
-        answers
         id
         question
+        answers
+        correctAnswer
       }
-      order
-      id
-      hasQuestions
       comments {
         id
-        createdAt
         content
+        createdAt
+        deletedAt
         author {
-          id
           fullName
+          id
         }
       }
     }
-    markdownContent
     description
+    id
+    markdownContent
     pictureUrl
     title
     totalDuration
     updatedAt
+    userProgress
   }
 }

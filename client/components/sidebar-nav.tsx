@@ -5,7 +5,7 @@ import { useParams, usePathname } from "next/navigation";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
-    href: string;
+    tab: string;
     title: string;
   }[];
 }
@@ -24,11 +24,11 @@ const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
     >
       {items.map((item) => (
         <Link
-          key={item.href}
-          href={`/teacher/lesson/${id}${item.href}`}
+          key={item.tab}
+          href={`/teacher/lesson/${id}/?tab=${item.tab}`}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            pathName.includes(item.href)
+            pathName.includes(item.tab)
               ? "bg-muted hover:bg-muted"
               : "hover:bg-transparent hover:underline",
             "justify-start",

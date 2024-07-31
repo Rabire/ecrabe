@@ -1,0 +1,9 @@
+mutation UpsertChapter(
+  $lessonId: String!
+  $input: ChapterInput!
+  $videoFile: Upload
+) {
+  upsertChapter(lessonId: $lessonId, input: $input, videoFile: $videoFile) {
+    id
+  }
+}
