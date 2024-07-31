@@ -1,7 +1,7 @@
 "use client";
 
 import UpsertLessonForm from "@/components/upsert-lesson-form";
-import { useGetLessonByIdQuery } from "@/src/types/graphql-generated";
+import { useTeacherLessonsPageQuery } from "@/src/types/graphql-generated";
 import { useParams, useSearchParams } from "next/navigation";
 import LessonBilling from "./billing/billing";
 import LessonChapters from "./chapters/chapters";
@@ -12,10 +12,12 @@ const LessonInfo = () => {
   const tab = searchParams.get("tab");
   const params = useParams<{ id: string }>();
 
-  const { data, loading } = useGetLessonByIdQuery({
+  const { data, loading } = useTeacherLessonsPageQuery({
     variables: { lessonId: params.id },
   });
+
   if (!data) return null;
+
   return (
     <main>
       {loading && <p>loading...</p>}

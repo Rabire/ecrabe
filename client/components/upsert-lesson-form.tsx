@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import {
-  GetLessonByIdQuery,
+  TeacherLessonsPageQuery,
   useUpdateLessonMutation,
 } from "@/src/types/graphql-generated";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +24,7 @@ type FormSchema = z.infer<typeof schema>;
 const UpsertLessonForm = ({
   lessonData,
 }: {
-  lessonData: GetLessonByIdQuery;
+  lessonData: TeacherLessonsPageQuery;
 }) => {
   const { id } = useParams();
   const form = useForm<FormSchema>({

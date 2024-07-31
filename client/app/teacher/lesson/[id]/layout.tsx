@@ -3,38 +3,23 @@
 import SidebarNav from "@/components/sidebar-nav";
 import Separator from "@/components/ui/separator";
 import apolloClient from "@/lib/apollo-client";
-import { useGetLessonByIdQuery } from "@/src/types/graphql-generated";
+import { useTeacherLessonsPageQuery } from "@/src/types/graphql-generated";
 import { ApolloProvider } from "@apollo/client";
 import { useParams } from "next/navigation";
-import React from "react";
 
 const SIDEBAR_ITEMS = [
-  {
-    title: "Formation",
-    tab: "home",
-  },
-  {
-    title: "Facturation",
-    tab: "billing",
-  },
-  {
-    title: "Étudiants",
-    tab: "students",
-  },
-  {
-    title: "Chapitres",
-    tab: "chapters",
-  },
+  { title: "Formation", tab: "home" },
+  { title: "Chapitres", tab: "chapters" },
+  { title: "Facturation", tab: "billing" },
+  { title: "Étudiants", tab: "students" },
 ];
 
-interface LessonLayoutProps {
-  children: React.ReactNode;
-}
+type Props = { children: React.ReactNode };
 
-export default function LessonLayout({ children }: LessonLayoutProps) {
+export default function LessonLayout({ children }: Props) {
   const params = useParams<{ id: string }>();
 
-  const { data, loading } = useGetLessonByIdQuery({
+  const { data, loading } = useTeacherLessonsPageQuery({
     variables: { lessonId: params.id },
   });
 
@@ -45,15 +30,8 @@ export default function LessonLayout({ children }: LessonLayoutProps) {
   if (data)
     return (
       <ApolloProvider client={apolloClient}>
-        <div className="space-y-6 p-10 pb-16">
-          <div className="space-y-0.5">
-            <h2 className="text-2xl font-bold tracking-tight">
-              {data.lesson?.title}
-            </h2>
-            <p className="text-muted-foreground">
-              Manage your account settings and set e-mail preferences.
-            </p>
-          </div>
+        <main>
+          <h2>{data.lesson?.title}</h2>
 
           <Separator className="my-6" />
 
@@ -64,7 +42,7 @@ export default function LessonLayout({ children }: LessonLayoutProps) {
 
             <div className="flex-1 lg:max-w-2xl">{children}</div>
           </div>
-        </div>
+        </main>
       </ApolloProvider>
     );
 }
