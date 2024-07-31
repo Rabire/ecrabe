@@ -1,0 +1,48 @@
+query ChapterPage($chapterId: String!) {
+  chapter(chapterId: $chapterId) {
+    id
+    title
+    markdownContent
+    updatedAt
+    videoUrl
+    videoDuration
+    isQuizCompletedByUser
+    isVideoWatchedByUser
+    userVideoWatchProgress
+    hasQuestions
+
+    lesson {
+      id
+      title
+      pictureUrl
+
+      chapters {
+        id
+        title
+        isVideoWatchedByUser
+        isQuizCompletedByUser
+        hasQuestions
+      }
+    }
+
+    questions {
+      id
+      question
+      answers
+    }
+
+    comments {
+      id
+      content
+      createdAt
+      deletedAt
+
+      author {
+        id
+        firstName
+        lastName
+        fullName
+      }
+    }
+  }
+}

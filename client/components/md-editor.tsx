@@ -1,3 +1,4 @@
+import FormFieldProps from "@/lib/types";
 import DOMPurify from "dompurify";
 import { marked } from "marked";
 import { useFormContext } from "react-hook-form";
@@ -15,13 +16,7 @@ import {
 const mdTextToHtml = async (text: string) =>
   DOMPurify.sanitize(await marked.parse(text));
 
-type Props = {
-  name: string;
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  className?: string;
-};
+type Props = FormFieldProps & { className?: string };
 
 const MdEditor = (props: Props) => {
   const { label, name, description, className } = props;

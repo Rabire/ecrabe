@@ -1,0 +1,10 @@
+mutation SaveVideoProgress($chapterId: String!, $watchedUntil: Int!) {
+  saveVideoProgress(chapterId: $chapterId, watchedUntil: $watchedUntil)
+}
+
+mutation SubmitQuiz($chapterId: String!, $answers: [QuestionAnswerInput!]!) {
+  submitQuiz(chapterId: $chapterId, answers: $answers) {
+    isValid
+    incorrectQuestionsId
+  }
+}
