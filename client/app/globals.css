@@ -77,10 +77,34 @@
   img {
     @apply h-full w-full bg-accent object-cover;
   }
+
+  .link {
+    @apply text-primary hover:underline;
+  }
 }
 
 @layer utilities {
   .error {
     @apply text-center italic text-destructive;
+  }
+}
+
+@layer components {
+  .content-info {
+    @apply space-y-2;
+  }
+
+  .content-info span {
+    @apply text-muted-foreground;
+  }
+
+  .content-info a {
+    @apply link;
+  }
+
+  .content-info h1:not(:first-child),
+  .content-info h2:not(:first-child),
+  .content-info h3:not(:first-child) {
+    @apply pt-4;
   }
 }
