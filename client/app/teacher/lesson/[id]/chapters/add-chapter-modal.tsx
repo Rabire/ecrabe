@@ -22,7 +22,7 @@ const AddChapterModal = ({ lessonId }: { lessonId: string }) => {
   } = useForm();
 
   const [upsertChapter, { loading }] = useUpsertChapterMutation({
-    onCompleted: (data) => {
+    onCompleted: () => {
       // console.log(data);
       // rediriger vers la page de la formation
       // router.push(`/teacher/lesson/${data.createLesson.id}`);
