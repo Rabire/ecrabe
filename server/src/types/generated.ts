@@ -171,10 +171,10 @@ export type MutationUpsertChapterArgs = {
 
 export type Query = {
   __typename?: "Query";
-  /** Retrieves a lesson chapter by id */
-  chapter?: Maybe<Chapter>;
-  /** Retrieves a single lesson by id */
-  lesson?: Maybe<Lesson>;
+  /** Retrieves a lesson chapter by String */
+  chapter: Chapter;
+  /** Retrieves a lesson by id */
+  lesson: Lesson;
   /** Retrieves all lessons */
   lessons: Array<Lesson>;
   /** Retrieves a single user by id, if no id is provided, it will return the current user */
@@ -184,11 +184,11 @@ export type Query = {
 };
 
 export type QueryChapterArgs = {
-  chapterId?: InputMaybe<Scalars["ID"]["input"]>;
+  chapterId: Scalars["String"]["input"];
 };
 
 export type QueryLessonArgs = {
-  lessonId?: InputMaybe<Scalars["ID"]["input"]>;
+  lessonId: Scalars["String"]["input"];
 };
 
 export type QueryUserArgs = {
@@ -586,16 +586,16 @@ export type QueryResolvers<
     ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
   chapter?: Resolver<
-    Maybe<ResolversTypes["Chapter"]>,
+    ResolversTypes["Chapter"],
     ParentType,
     ContextType,
-    Partial<QueryChapterArgs>
+    RequireFields<QueryChapterArgs, "chapterId">
   >;
   lesson?: Resolver<
-    Maybe<ResolversTypes["Lesson"]>,
+    ResolversTypes["Lesson"],
     ParentType,
     ContextType,
-    Partial<QueryLessonArgs>
+    RequireFields<QueryLessonArgs, "lessonId">
   >;
   lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
   user?: Resolver<

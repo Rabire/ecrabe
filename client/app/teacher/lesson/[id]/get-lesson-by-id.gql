@@ -1,4 +1,4 @@
-query Lesson($lessonId: ID) {
+query Lesson($lessonId: String!) {
   lesson(lessonId: $lessonId) {
     id
     chapters {

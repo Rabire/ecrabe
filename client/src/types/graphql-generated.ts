@@ -152,10 +152,10 @@ export type MutationUpsertChapterArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  /** Retrieves a lesson chapter by id */
-  chapter?: Maybe<Chapter>;
-  /** Retrieves a single lesson by id */
-  lesson?: Maybe<Lesson>;
+  /** Retrieves a lesson chapter by String */
+  chapter: Chapter;
+  /** Retrieves a lesson by id */
+  lesson: Lesson;
   /** Retrieves all lessons */
   lessons: Array<Lesson>;
   /** Retrieves a single user by id, if no id is provided, it will return the current user */
@@ -166,12 +166,12 @@ export type Query = {
 
 
 export type QueryChapterArgs = {
-  chapterId?: InputMaybe<Scalars['ID']['input']>;
+  chapterId: Scalars['String']['input'];
 };
 
 
 export type QueryLessonArgs = {
-  lessonId?: InputMaybe<Scalars['ID']['input']>;
+  lessonId: Scalars['String']['input'];
 };
 
 
@@ -259,11 +259,11 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'UserWithTokens', tokens: { __typename?: 'Tokens', accessToken: string, refreshToken: string }, user: { __typename?: 'User', role: Role } } };
 
 export type LessonPageQueryVariables = Exact<{
-  lessonId?: InputMaybe<Scalars['ID']['input']>;
+  lessonId: Scalars['String']['input'];
 }>;
 
 
-export type LessonPageQuery = { __typename?: 'Query', lesson?: { __typename?: 'Lesson', id: string, title: string, description?: string | null, pictureUrl?: string | null, markdownContent?: string | null, totalDuration: number, userProgress: number, updatedAt?: Date | null, teacher: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string }, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, hasQuestions: boolean }> } | null };
+export type LessonPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', id: string, title: string, description?: string | null, pictureUrl?: string | null, markdownContent?: string | null, totalDuration: number, userProgress: number, updatedAt?: Date | null, teacher: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string }, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, hasQuestions: boolean }> } };
 
 export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String']['input'];
@@ -273,11 +273,11 @@ export type CreateLessonMutationVariables = Exact<{
 export type CreateLessonMutation = { __typename?: 'Mutation', createLesson: { __typename?: 'Lesson', id: string, title: string } };
 
 export type LessonQueryVariables = Exact<{
-  lessonId?: InputMaybe<Scalars['ID']['input']>;
+  lessonId: Scalars['String']['input'];
 }>;
 
 
-export type LessonQuery = { __typename?: 'Query', lesson?: { __typename?: 'Lesson', id: string, markdownContent?: string | null, description?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, chapters: Array<{ __typename?: 'Chapter', title: string, markdownContent?: string | null, updatedAt: Date, videoDuration: number, videoUrl: string, order: number, id: string, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', correctAnswer: string, answers: Array<string>, id: string, question: string }>, comments: Array<{ __typename?: 'Comment', id: string, createdAt: Date, content: string, author: { __typename?: 'User', id: string, fullName: string } }> }> } | null };
+export type LessonQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', id: string, markdownContent?: string | null, description?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, chapters: Array<{ __typename?: 'Chapter', title: string, markdownContent?: string | null, updatedAt: Date, videoDuration: number, videoUrl: string, order: number, id: string, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', correctAnswer: string, answers: Array<string>, id: string, question: string }>, comments: Array<{ __typename?: 'Comment', id: string, createdAt: Date, content: string, author: { __typename?: 'User', id: string, fullName: string } }> }> } };
 
 export type UpdateLessonMutationVariables = Exact<{
   lessonId: Scalars['String']['input'];
@@ -368,7 +368,7 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const LessonPageDocument = gql`
-    query LessonPage($lessonId: ID) {
+    query LessonPage($lessonId: String!) {
   lesson(lessonId: $lessonId) {
     id
     title
@@ -412,7 +412,7 @@ export const LessonPageDocument = gql`
  *   },
  * });
  */
-export function useLessonPageQuery(baseOptions?: Apollo.QueryHookOptions<LessonPageQuery, LessonPageQueryVariables>) {
+export function useLessonPageQuery(baseOptions: Apollo.QueryHookOptions<LessonPageQuery, LessonPageQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<LessonPageQuery, LessonPageQueryVariables>(LessonPageDocument, options);
       }
@@ -458,7 +458,7 @@ export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMu
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
 export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
 export const LessonDocument = gql`
-    query Lesson($lessonId: ID) {
+    query Lesson($lessonId: String!) {
   lesson(lessonId: $lessonId) {
     id
     chapters {
@@ -512,7 +512,7 @@ export const LessonDocument = gql`
  *   },
  * });
  */
-export function useLessonQuery(baseOptions?: Apollo.QueryHookOptions<LessonQuery, LessonQueryVariables>) {
+export function useLessonQuery(baseOptions: Apollo.QueryHookOptions<LessonQuery, LessonQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<LessonQuery, LessonQueryVariables>(LessonDocument, options);
       }
