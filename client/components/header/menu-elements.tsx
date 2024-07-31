@@ -14,16 +14,16 @@ const MenuElements = ({ className }: Props) => (
     </Button>
 
     <Button asChild variant="outline">
-      <a href="/teacher">
+      <a href="/student/library">
         <BookMarkedIcon size={16} />
-        <span>Devenir formateur</span>
+        <span>Bibliothèque</span>
       </a>
     </Button>
 
     <Button asChild variant="outline">
-      <a href="/teacher">
+      <a href="/student/shop">
         <LibraryBig size={16} />
-        <span>Bibliothèque</span>
+        <span>Librairie</span>
       </a>
     </Button>
   </div>

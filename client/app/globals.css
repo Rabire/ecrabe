@@ -73,4 +73,8 @@
   button {
     @apply transition-colors;
   }
+
+  img {
+    @apply h-full w-full bg-accent object-cover;
+  }
 }

@@ -10,6 +10,7 @@ import {
   CreditCardIcon,
   GraduationCapIcon,
   LogOutIcon,
+  MoonIcon,
   User2Icon,
 } from "lucide-react";
 import Link from "next/link";
@@ -53,6 +54,11 @@ const MenuDropdown = ({ className }: Props) => (
           <CreditCardIcon size={16} />
           <span className="ml-2">Paiements</span>
         </Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        <MoonIcon size={16} />
+        {/* TODO: change theme */}
+        <span className="ml-2">Thème sombre</span>
       </DropdownMenuItem>
       <DropdownMenuItem onSelect={logout}>
         <LogOutIcon size={16} />

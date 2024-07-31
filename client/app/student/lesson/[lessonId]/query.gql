@@ -1,0 +1,26 @@
+query LessonPage($lessonId: ID) {
+  lesson(lessonId: $lessonId) {
+    id
+    title
+    description
+    pictureUrl
+    markdownContent
+    totalDuration
+    userProgress
+    updatedAt
+    teacher {
+      id
+      firstName
+      lastName
+      fullName
+    }
+    chapters {
+      id
+      order
+      title
+      isQuizCompletedByUser
+      isVideoWatchedByUser
+      hasQuestions
+    }
+  }
+}
