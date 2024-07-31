@@ -2,11 +2,11 @@ type Query {
   "Retrieves all lessons"
   lessons: [Lesson!]!
 
-  "Retrieves a single lesson by id"
-  lesson(lessonId: ID): Lesson
+  "Retrieves a lesson by id"
+  lesson(lessonId: String!): Lesson!
 
-  "Retrieves a lesson chapter by id"
-  chapter(chapterId: ID): Chapter
+  "Retrieves a lesson chapter by String"
+  chapter(chapterId: String!): Chapter!
 
   "Retrieves all users"
   users: [User!]!

@@ -53,7 +53,34 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  main {
+    @apply mx-auto mt-6 max-w-[1440px] space-y-8 px-6;
+  }
+
+  h1 {
+    @apply text-4xl font-bold;
+  }
+
+  h2 {
+    @apply text-3xl font-bold;
+  }
+
+  button {
+    @apply transition-colors;
+  }
+
+  img {
+    @apply h-full w-full bg-accent object-cover;
+  }
+}
+
+@layer utilities {
+  .error {
+    @apply text-center italic text-destructive;
   }
 }

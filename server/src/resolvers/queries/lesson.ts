@@ -8,13 +8,9 @@ const lessonQueryResolvers: QueryResolvers = {
   },
 
   lesson: async (_parent, { lessonId }, { prisma }) => {
-    if (!lessonId) return null;
-
-    const lesson = await prisma.lesson.findUniqueOrThrow({
+    return prisma.lesson.findUniqueOrThrow({
       where: { id: lessonId },
     });
-
-    return lesson;
   },
 };
 

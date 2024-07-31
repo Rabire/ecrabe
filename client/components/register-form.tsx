@@ -95,7 +95,9 @@ const RegisterForm = () => {
             />
           </div>
 
-          <Button disabled={loading}>Continuer</Button>
+          <Button disabled={loading} className="mt-10">
+            Continuer
+          </Button>
         </div>
       </form>
     </Form>
