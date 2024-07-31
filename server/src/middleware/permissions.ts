@@ -32,6 +32,7 @@ const rules = {
 
   isCurrentUser: rule()(
     async (_parent, { userId: userIdParam }, { userId }: GraphQLContext) => {
+      if (!userIdParam) return true;
       if (userId !== userIdParam) return "User is not the current user";
       return true;
     }

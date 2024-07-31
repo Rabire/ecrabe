@@ -1,0 +1,13 @@
+query TeacherHomePage($userId: String) {
+  user(userId: $userId) {
+    lessons {
+      markdownContent
+      id
+      description
+      pictureUrl
+      title
+      totalDuration
+      updatedAt
+    }
+  }
+}

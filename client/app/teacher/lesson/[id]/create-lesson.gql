@@ -1,6 +1,0 @@
-mutation CreateLesson($title: String!) {
-  createLesson(title: $title) {
-    id
-    title
-  }
-}

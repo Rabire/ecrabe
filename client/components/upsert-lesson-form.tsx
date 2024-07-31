@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useUpdateLessonMutation } from "@/src/types/graphql-generated";
+import {
+  TeacherLessonsPageQuery,
+  useUpdateLessonMutation,
+} from "@/src/types/graphql-generated";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -18,10 +21,19 @@ const schema = z.object({
 
 type FormSchema = z.infer<typeof schema>;
 
-const UpsertLessonForm = () => {
+const UpsertLessonForm = ({
+  lessonData,
+}: {
+  lessonData: TeacherLessonsPageQuery;
+}) => {
   const { id } = useParams();
   const form = useForm<FormSchema>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      description: lessonData.lesson?.description || "",
+      title: lessonData.lesson?.title || "",
+      markdownContent: lessonData.lesson?.markdownContent || "",
+    },
   });
 
   const [upsert, { loading }] = useUpdateLessonMutation({
@@ -48,7 +60,9 @@ const UpsertLessonForm = () => {
             <FileField name="pictureFile" placeholder="Image de couverture" />
           </div>
 
-          <Button disabled={loading}>Continuer</Button>
+          <Button disabled={loading} type="submit">
+            Continuer
+          </Button>
         </div>
       </form>
     </Form>

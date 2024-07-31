@@ -1,22 +1,27 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useTeacherHomePageQuery } from "@/src/types/graphql-generated";
 import { logout } from "@/store/access-token";
+import Link from "next/link";
+import CreateLessonModal from "./create-lesson-modal";
 
 export default function TeacherHome() {
+  const { data } = useTeacherHomePageQuery();
+  // console.log(data, loading, error);
+  const lessons = data?.user.lessons;
   return (
     <main>
       <h1>Teacher home page</h1>
 
-      <Button>Nouvelle formation</Button>
+      <CreateLessonModal />
 
-      <Button variant="outline" asChild>
-        <a href="/teacher/lesson/1">Formation 1</a>
-      </Button>
-
-      <Button variant="outline" asChild>
-        <a href="/teacher/lesson/2">Formation 2</a>
-      </Button>
+      {/* TODO: replace buttons with cards for each lesson */}
+      {lessons?.map((lesson) => (
+        <Button variant="outline" key={lesson.id} asChild>
+          <Link href={`/teacher/lesson/${lesson.id}`}>{lesson.title}</Link>
+        </Button>
+      ))}
 
       <Button variant="ghost" onClick={logout}>
         Déconnexion

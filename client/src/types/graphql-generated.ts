@@ -265,6 +265,15 @@ export type LessonPageQueryVariables = Exact<{
 
 export type LessonPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', id: string, title: string, description?: string | null, pictureUrl?: string | null, markdownContent?: string | null, totalDuration: number, userProgress: number, updatedAt?: Date | null, teacher: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string }, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, hasQuestions: boolean }> } };
 
+export type UpsertChapterMutationVariables = Exact<{
+  lessonId: Scalars['String']['input'];
+  input: ChapterInput;
+  videoFile?: InputMaybe<Scalars['Upload']['input']>;
+}>;
+
+
+export type UpsertChapterMutation = { __typename?: 'Mutation', upsertChapter: { __typename?: 'Chapter', id: string } };
+
 export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String']['input'];
 }>;
@@ -272,12 +281,12 @@ export type CreateLessonMutationVariables = Exact<{
 
 export type CreateLessonMutation = { __typename?: 'Mutation', createLesson: { __typename?: 'Lesson', id: string, title: string } };
 
-export type LessonQueryVariables = Exact<{
+export type TeacherLessonsPageQueryVariables = Exact<{
   lessonId: Scalars['String']['input'];
 }>;
 
 
-export type LessonQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', id: string, markdownContent?: string | null, description?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, chapters: Array<{ __typename?: 'Chapter', title: string, markdownContent?: string | null, updatedAt: Date, videoDuration: number, videoUrl: string, order: number, id: string, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', correctAnswer: string, answers: Array<string>, id: string, question: string }>, comments: Array<{ __typename?: 'Comment', id: string, createdAt: Date, content: string, author: { __typename?: 'User', id: string, fullName: string } }> }> } };
+export type TeacherLessonsPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', description?: string | null, id: string, markdownContent?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, userProgress: number, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl: string, videoDuration: number, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', fullName: string, id: string } }> }> } };
 
 export type UpdateLessonMutationVariables = Exact<{
   lessonId: Scalars['String']['input'];
@@ -286,6 +295,13 @@ export type UpdateLessonMutationVariables = Exact<{
 
 
 export type UpdateLessonMutation = { __typename?: 'Mutation', updateLesson: { __typename?: 'Lesson', id: string } };
+
+export type TeacherHomePageQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type TeacherHomePageQuery = { __typename?: 'Query', user: { __typename?: 'User', lessons: Array<{ __typename?: 'Lesson', markdownContent?: string | null, id: string, description?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null }> } };
 
 
 export const LoginDocument = gql`
@@ -423,6 +439,41 @@ export function useLessonPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type LessonPageQueryHookResult = ReturnType<typeof useLessonPageQuery>;
 export type LessonPageLazyQueryHookResult = ReturnType<typeof useLessonPageLazyQuery>;
 export type LessonPageQueryResult = Apollo.QueryResult<LessonPageQuery, LessonPageQueryVariables>;
+export const UpsertChapterDocument = gql`
+    mutation UpsertChapter($lessonId: String!, $input: ChapterInput!, $videoFile: Upload) {
+  upsertChapter(lessonId: $lessonId, input: $input, videoFile: $videoFile) {
+    id
+  }
+}
+    `;
+export type UpsertChapterMutationFn = Apollo.MutationFunction<UpsertChapterMutation, UpsertChapterMutationVariables>;
+
+/**
+ * __useUpsertChapterMutation__
+ *
+ * To run a mutation, you first call `useUpsertChapterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpsertChapterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upsertChapterMutation, { data, loading, error }] = useUpsertChapterMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *      input: // value for 'input'
+ *      videoFile: // value for 'videoFile'
+ *   },
+ * });
+ */
+export function useUpsertChapterMutation(baseOptions?: Apollo.MutationHookOptions<UpsertChapterMutation, UpsertChapterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpsertChapterMutation, UpsertChapterMutationVariables>(UpsertChapterDocument, options);
+      }
+export type UpsertChapterMutationHookResult = ReturnType<typeof useUpsertChapterMutation>;
+export type UpsertChapterMutationResult = Apollo.MutationResult<UpsertChapterMutation>;
+export type UpsertChapterMutationOptions = Apollo.BaseMutationOptions<UpsertChapterMutation, UpsertChapterMutationVariables>;
 export const CreateLessonDocument = gql`
     mutation CreateLesson($title: String!) {
   createLesson(title: $title) {
@@ -457,72 +508,77 @@ export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
 export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
-export const LessonDocument = gql`
-    query Lesson($lessonId: String!) {
+export const TeacherLessonsPageDocument = gql`
+    query TeacherLessonsPage($lessonId: String!) {
   lesson(lessonId: $lessonId) {
-    id
     chapters {
+      id
+      order
       title
       markdownContent
       updatedAt
-      videoDuration
       videoUrl
+      videoDuration
+      isQuizCompletedByUser
+      isVideoWatchedByUser
+      userVideoWatchProgress
+      hasQuestions
       questions {
-        correctAnswer
-        answers
         id
         question
+        answers
+        correctAnswer
       }
-      order
-      id
-      hasQuestions
       comments {
         id
-        createdAt
         content
+        createdAt
+        deletedAt
         author {
-          id
           fullName
+          id
         }
       }
     }
-    markdownContent
     description
+    id
+    markdownContent
     pictureUrl
     title
     totalDuration
     updatedAt
+    userProgress
   }
 }
     `;
 
 /**
- * __useLessonQuery__
+ * __useTeacherLessonsPageQuery__
  *
- * To run a query within a React component, call `useLessonQuery` and pass it any options that fit your needs.
- * When your component renders, `useLessonQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTeacherLessonsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeacherLessonsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLessonQuery({
+ * const { data, loading, error } = useTeacherLessonsPageQuery({
  *   variables: {
  *      lessonId: // value for 'lessonId'
  *   },
  * });
  */
-export function useLessonQuery(baseOptions: Apollo.QueryHookOptions<LessonQuery, LessonQueryVariables>) {
+export function useTeacherLessonsPageQuery(baseOptions: Apollo.QueryHookOptions<TeacherLessonsPageQuery, TeacherLessonsPageQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LessonQuery, LessonQueryVariables>(LessonDocument, options);
+        return Apollo.useQuery<TeacherLessonsPageQuery, TeacherLessonsPageQueryVariables>(TeacherLessonsPageDocument, options);
       }
-export function useLessonLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LessonQuery, LessonQueryVariables>) {
+export function useTeacherLessonsPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeacherLessonsPageQuery, TeacherLessonsPageQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LessonQuery, LessonQueryVariables>(LessonDocument, options);
+          return Apollo.useLazyQuery<TeacherLessonsPageQuery, TeacherLessonsPageQueryVariables>(TeacherLessonsPageDocument, options);
         }
-export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
-export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
-export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
+export type TeacherLessonsPageQueryHookResult = ReturnType<typeof useTeacherLessonsPageQuery>;
+export type TeacherLessonsPageLazyQueryHookResult = ReturnType<typeof useTeacherLessonsPageLazyQuery>;
+export type TeacherLessonsPageQueryResult = Apollo.QueryResult<TeacherLessonsPageQuery, TeacherLessonsPageQueryVariables>;
 export const UpdateLessonDocument = gql`
     mutation UpdateLesson($lessonId: String!, $input: LessonInput!) {
   updateLesson(lessonId: $lessonId, input: $input) {
@@ -557,3 +613,46 @@ export function useUpdateLessonMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateLessonMutationHookResult = ReturnType<typeof useUpdateLessonMutation>;
 export type UpdateLessonMutationResult = Apollo.MutationResult<UpdateLessonMutation>;
 export type UpdateLessonMutationOptions = Apollo.BaseMutationOptions<UpdateLessonMutation, UpdateLessonMutationVariables>;
+export const TeacherHomePageDocument = gql`
+    query TeacherHomePage($userId: String) {
+  user(userId: $userId) {
+    lessons {
+      markdownContent
+      id
+      description
+      pictureUrl
+      title
+      totalDuration
+      updatedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useTeacherHomePageQuery__
+ *
+ * To run a query within a React component, call `useTeacherHomePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeacherHomePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeacherHomePageQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useTeacherHomePageQuery(baseOptions?: Apollo.QueryHookOptions<TeacherHomePageQuery, TeacherHomePageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TeacherHomePageQuery, TeacherHomePageQueryVariables>(TeacherHomePageDocument, options);
+      }
+export function useTeacherHomePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeacherHomePageQuery, TeacherHomePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TeacherHomePageQuery, TeacherHomePageQueryVariables>(TeacherHomePageDocument, options);
+        }
+export type TeacherHomePageQueryHookResult = ReturnType<typeof useTeacherHomePageQuery>;
+export type TeacherHomePageLazyQueryHookResult = ReturnType<typeof useTeacherHomePageLazyQuery>;
+export type TeacherHomePageQueryResult = Apollo.QueryResult<TeacherHomePageQuery, TeacherHomePageQueryVariables>;
