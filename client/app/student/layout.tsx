@@ -1,5 +1,6 @@
 "use client";
 
+import Header from "@/components/header";
 import apolloClient from "@/lib/apollo-client";
 import { $accessToken } from "@/store/access-token";
 import { ApolloProvider } from "@apollo/client";
@@ -12,7 +13,13 @@ export default function RootLayout({
   const accessToken = useStore($accessToken);
   const router = useRouter();
 
-  if (!accessToken) router.push("/");
+  if (!accessToken) router.push("/login");
 
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
+  return (
+    <ApolloProvider client={apolloClient}>
+      <Header />
+
+      {children}
+    </ApolloProvider>
+  );
 }

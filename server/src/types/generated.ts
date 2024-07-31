@@ -177,8 +177,8 @@ export type Query = {
   lesson?: Maybe<Lesson>;
   /** Retrieves all lessons */
   lessons: Array<Lesson>;
-  /** Retrieves a single user by id */
-  user?: Maybe<User>;
+  /** Retrieves a single user by id, if no id is provided, it will return the current user */
+  user: User;
   /** Retrieves all users */
   users: Array<User>;
 };
@@ -599,7 +599,7 @@ export type QueryResolvers<
   >;
   lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
   user?: Resolver<
-    Maybe<ResolversTypes["User"]>,
+    ResolversTypes["User"],
     ParentType,
     ContextType,
     Partial<QueryUserArgs>

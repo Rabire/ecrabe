@@ -1,4 +1,5 @@
 import TailwindIndicator from "@/components/tailwind-indicator";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={cn("relative", inter.className)}>
         <TailwindIndicator />
         {children}
       </body>
