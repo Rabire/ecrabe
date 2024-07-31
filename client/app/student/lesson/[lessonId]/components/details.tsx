@@ -1,3 +1,4 @@
+import MdRenderer from "@/components/md-renderer";
 import { formatDate, formatSeconds } from "@/lib/format-utils";
 import { LessonPageQuery } from "@/src/types/graphql-generated";
 import { BookIcon, CalendarIcon, TimerIcon } from "lucide-react";
@@ -25,9 +26,7 @@ const LessonDetail = ({ lesson }: Props) => (
       </div>
     </div>
 
-    {/* TODO: MdRenderer */}
-    {/* <MdRenderer text={lesson.markdownContent} /> */}
-    <p>{lesson.markdownContent}</p>
+    <MdRenderer text={lesson.markdownContent} />
 
     <h2>Formateur</h2>
     <p>TODO: UserInfo</p>
