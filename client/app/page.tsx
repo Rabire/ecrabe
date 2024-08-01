@@ -1,11 +1,25 @@
-import { Button } from "@/components/ui/button";
+import CallToAction from "./components/CallToAction";
+import Faqs from "./components/Faqs";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Pricing from "./components/Pricing";
+import Testimonials from "./components/Testimonials";
 
 export default function Home() {
   return (
-    <main>
-      <Button asChild>
-        <a href="/login">Se connecter / s&apos;inscrire</a>
-      </Button>
-    </main>
+    <>
+      <Header />
+      <main className="unset-all !space-y-0">
+        <Hero />
+        {/* <PrimaryFeatures /> */}
+        {/* <SecondaryFeatures /> */}
+        <CallToAction />
+        <Testimonials />
+        <Pricing />
+        <Faqs />
+      </main>
+      <Footer />
+    </>
   );
 }

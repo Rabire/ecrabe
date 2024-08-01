@@ -1,7 +1,7 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
+import Logo from "../logo";
 import { Button } from "../ui/button";
-import Logo from "./logo";
 import MenuDropdown from "./menu-dropdown";
 import MenuElements from "./menu-elements";
 

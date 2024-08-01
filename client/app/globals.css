@@ -87,6 +87,10 @@
   .error {
     @apply text-center italic text-destructive;
   }
+
+  .unset-all {
+    all: unset;
+  }
 }
 
 @layer components {
