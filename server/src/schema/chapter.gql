@@ -8,9 +8,9 @@ type Chapter {
   updatedAt: DateTime!
 
   # Computed
-  videoUrl: String!
+  videoUrl: String
   "Duration of the video in seconds."
-  videoDuration: Int!
+  videoDuration: Int
   isQuizCompletedByUser: Boolean!
   isVideoWatchedByUser: Boolean!
   "Percentage of video watched by user"

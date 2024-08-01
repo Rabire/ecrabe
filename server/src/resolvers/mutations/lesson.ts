@@ -103,8 +103,6 @@ const lessonMutationsResolvers: MutationResolvers = {
     { lessonId, chapterId, input, videoFile },
     { prisma, minio }
   ) => {
-    if (!lessonId && !videoFile) throw new Error("videoFile missing");
-
     const id = chapterId || uuidv4();
 
     const fileName =
@@ -115,16 +113,13 @@ const lessonMutationsResolvers: MutationResolvers = {
         fileId: id,
       }));
 
-    if (!videoFile && !chapterId)
-      throw new Error("videoFile is required for creation");
-
     const { questions, ...restInput } = input;
 
     const lesson = await prisma.chapter.upsert({
       where: { id },
       update: {
         ...restInput,
-        videoPath: fileName ? fileName : undefined,
+        videoPath: fileName || undefined,
         questions: {
           deleteMany: {},
           create: questions,
@@ -132,7 +127,7 @@ const lessonMutationsResolvers: MutationResolvers = {
       },
       create: {
         ...restInput,
-        videoPath: fileName || "something went verry wrong",
+        videoPath: fileName || "something went very wrong",
         lesson: { connect: { id: lessonId } },
         questions: { create: questions },
       },
