@@ -38,19 +38,19 @@ const MenuDropdown = ({ className }: Props) => (
 
     <DropdownMenuContent>
       <DropdownMenuItem asChild>
-        <Link href="/profileTODO:">
+        <Link href="/profile">
           <User2Icon size={16} />
           <span className="ml-2">Profil</span>
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild>
-        <Link href="/teacherTODO:">
+        <Link href="/teacher">
           <GraduationCapIcon size={16} />
           <span className="ml-2">Devenir formateur</span>
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild>
-        <Link href="/paymentsTODO:">
+        <Link href="/payments">
           <CreditCardIcon size={16} />
           <span className="ml-2">Paiements</span>
         </Link>

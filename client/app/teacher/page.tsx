@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useTeacherHomePageQuery } from "@/src/types/graphql-generated";
 import { logout } from "@/store/access-token";
 import Link from "next/link";
-import CreateLessonModal from "./create-lesson-modal";
+import CreateLessonModal from "./components/create-lesson-modal";
 
 export default function TeacherHome() {
   const { data } = useTeacherHomePageQuery();
-  // console.log(data, loading, error);
+  // TODO: loading, error handling
+
   const lessons = data?.user.lessons;
+
   return (
     <main>
       <h1>Teacher home page</h1>

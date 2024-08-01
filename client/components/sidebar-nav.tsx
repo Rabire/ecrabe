@@ -13,32 +13,37 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
-  const { id } = useParams();
+
+  const { lessonId } = useParams();
+
+  // TODO: handle active tab style
 
   return (
-    <nav
-      className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className,
-      )}
-      {...props}
-    >
-      {items.map((item) => (
-        <Link
-          key={item.tab}
-          href={`/teacher/lesson/${id}/?tab=${item.tab}`}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            tab?.includes(item.tab)
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start",
-          )}
-        >
-          {item.title}
-        </Link>
-      ))}
-    </nav>
+    <aside className="px-2 lg:w-1/5">
+      <nav
+        className={cn(
+          "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
+          className,
+        )}
+        {...props}
+      >
+        {items.map((item) => (
+          <Link
+            key={item.tab}
+            href={`/teacher/lesson/${lessonId}/?tab=${item.tab}`}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              tab?.includes(item.tab)
+                ? "bg-muted hover:bg-muted"
+                : "hover:bg-transparent hover:underline",
+              "justify-start",
+            )}
+          >
+            {item.title}
+          </Link>
+        ))}
+      </nav>
+    </aside>
   );
 };
 

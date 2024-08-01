@@ -7,12 +7,15 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUpsertChapterMutation } from "@/src/types/graphql-generated";
+import {
+  ChapterQuery,
+  useEditChapterMutation,
+} from "@/src/types/graphql-generated";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import QuestionForm from "./add-question";
+import QuestionForm from "../edit/components/question-form";
 
 // zod schema
 const zSchema = z.object({
@@ -35,12 +38,7 @@ const zSchema = z.object({
       .refine(({ answers }) => {
         const correctAnswerArray = answers.filter((answer) => answer.isCorrect);
         return correctAnswerArray.length === 1;
-      })
-      .transform((data) => ({
-        question: data.question,
-        answers: data.answers.map((answer) => answer.answer),
-        correctAnswer: data.answers.find((answer) => answer.isCorrect)!.answer,
-      })),
+      }),
   ),
   title: z.string().min(1),
   videoDuration: z.coerce.number(),
@@ -50,14 +48,35 @@ const zSchema = z.object({
 
 type FormSchema = z.infer<typeof zSchema>;
 
-const AddChapterForm = ({ lessonId }: { lessonId: string }) => {
+const EditChapterForm = ({ chapterData }: { chapterData: ChapterQuery }) => {
+  useEffect(() => {
+    form.reset({
+      markdownContent: chapterData.chapter.markdownContent,
+      title: chapterData.chapter.title,
+      videoDuration: chapterData.chapter.videoDuration || 0,
+
+      questions: chapterData.chapter.questions.map((question) => ({
+        question: question.question,
+        answers: question.answers.map((answer) => ({
+          answer,
+          isCorrect: answer === question.correctAnswer,
+        })),
+      })),
+    });
+  }, [chapterData]);
   const form = useForm<FormSchema>({
     resolver: zodResolver(zSchema),
     defaultValues: {
-      markdownContent: "",
-      questions: [],
-      title: "",
-      videoDuration: 0,
+      markdownContent: chapterData.chapter.markdownContent,
+      questions: chapterData.chapter.questions.map((question) => ({
+        question: question.question,
+        answers: question.answers.map((answer) => ({
+          answer,
+          isCorrect: answer === question.correctAnswer,
+        })),
+      })),
+      title: chapterData.chapter.title,
+      videoDuration: chapterData.chapter.videoDuration || 0,
     },
   });
 
@@ -68,7 +87,7 @@ const AddChapterForm = ({ lessonId }: { lessonId: string }) => {
     name: `questions` as never,
   });
 
-  const [upsertChapter, { loading }] = useUpsertChapterMutation({
+  const [upsertChapter, { loading }] = useEditChapterMutation({
     onCompleted: (data) => {
       console.log(data);
     },
@@ -86,12 +105,20 @@ const AddChapterForm = ({ lessonId }: { lessonId: string }) => {
 
   // console.log(form.formState.errors);
 
-  const handleCreateChapter = async (formData: FormSchema) => {
-    /* console.log(videoFile);
-    console.log(lessonId);
-    console.log(formData); */
+  const handleEditChapter = async (formData: FormSchema) => {
+    const questions = formData.questions.map((question) => ({
+      question: question.question,
+      answers: question.answers.map((answer) => answer.answer),
+      correctAnswer: question.answers.find((answer) => answer.isCorrect)!
+        .answer,
+    }));
+
     upsertChapter({
-      variables: { lessonId, input: formData, videoFile },
+      variables: {
+        lessonId: chapterData.chapter.lesson.id,
+        input: { ...formData, questions },
+        videoFile,
+      },
     });
   };
 
@@ -99,7 +126,7 @@ const AddChapterForm = ({ lessonId }: { lessonId: string }) => {
     <div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(handleCreateChapter)}
+          onSubmit={form.handleSubmit(handleEditChapter)}
           className="space-y-4"
         >
           <TextField name="title" label="Titre" />
@@ -136,7 +163,9 @@ const AddChapterForm = ({ lessonId }: { lessonId: string }) => {
           </Button>
 
           <DialogFooter>
-            <Button type="submit">{loading ? "Loading..." : "Créer"}</Button>
+            <Button type="submit">
+              {loading ? "Loading..." : "Enregistrer"}
+            </Button>
           </DialogFooter>
         </form>
       </Form>
@@ -144,4 +173,4 @@ const AddChapterForm = ({ lessonId }: { lessonId: string }) => {
   );
 };
 
-export default AddChapterForm;
+export default EditChapterForm;

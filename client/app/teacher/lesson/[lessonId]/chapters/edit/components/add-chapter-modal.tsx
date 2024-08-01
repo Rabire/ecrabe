@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FieldValues, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import QuestionForm from "./add-question";
+import QuestionForm from "./question-form";
 
 export const zQuestion = z
   .object({
@@ -39,6 +39,7 @@ export const zCreateChapter = z.object({
 
 type FormSchema = z.infer<typeof zCreateChapter>;
 
+// TODO: On ne se sert de co composant nul part ?
 const AddChapterModal = ({ lessonId }: { lessonId: string }) => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(zCreateChapter),
@@ -69,7 +70,7 @@ const AddChapterModal = ({ lessonId }: { lessonId: string }) => {
 
   const handleCreateChapter = async (formData: FieldValues) => {
     /*  */
-    const formatedQuestions = formData.questions.map((question: any) => {
+    const formattedQuestions = formData.questions.map((question: any) => {
       const correctAnswer = question.answers.find(
         (answer: any) => answer.isCorrect,
       );
@@ -82,7 +83,7 @@ const AddChapterModal = ({ lessonId }: { lessonId: string }) => {
     const videoDuration = parseInt(formData.videoDuration, 10);
     const newFormData = {
       ...formData,
-      questions: formatedQuestions,
+      questions: formattedQuestions,
       videoDuration,
       videoFile,
     } as FieldValues;

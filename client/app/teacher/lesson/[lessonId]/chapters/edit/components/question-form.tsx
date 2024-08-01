@@ -18,6 +18,7 @@ const QuestionForm = ({ questionIndex, removeQuestion }: Props) => {
     control: form.control,
     name: `${name}.answers`,
   });
+
   return (
     <div className="relative flex flex-col gap-2 rounded-md bg-input/20 p-4 pr-12">
       <TextField name={`${name}.question`} label="Question" />
