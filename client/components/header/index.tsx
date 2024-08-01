@@ -1,5 +1,5 @@
+import Logo from "../logo";
 import BurgerSideBar from "./burger-side-bar";
-import Logo from "./logo";
 import MenuDropdown from "./menu-dropdown";
 import MenuElements from "./menu-elements";
 
