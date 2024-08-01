@@ -1,8 +1,12 @@
 import AddChapterForm from "../add-chapter-form";
 
-const page = () => (
-  <div>
-    <AddChapterForm lessonId="1decdbdd-fbb6-4372-8bcd-b17301d1389e" />
-  </div>
-);
+const page = ({ params }: { params: { id: string } }) => {
+  const { id } = params;
+  // console.log(id);
+  return (
+    <div>
+      <AddChapterForm lessonId={id} />
+    </div>
+  );
+};
 export default page;
