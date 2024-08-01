@@ -17,7 +17,7 @@ const chapterResolver: ChapterResolvers = {
 
     return getIsVideoWatchedByUser(
       userVideoProgress.watchedUntil,
-      videoDuration
+      videoDuration || 0
     );
   },
 
@@ -30,6 +30,8 @@ const chapterResolver: ChapterResolvers = {
   },
 
   videoUrl: async ({ videoPath }, _, { minio }) => {
+    if (!videoPath) return null;
+
     const url = await minio.getFileUrl(videoPath);
 
     return url;

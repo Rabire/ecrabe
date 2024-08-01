@@ -14,7 +14,10 @@ const lessonResolver: LessonResolvers = {
       where: { lessonId: id },
     });
 
-    return chapters.reduce((acc, chapter) => acc + chapter.videoDuration, 0);
+    return chapters.reduce(
+      (acc, chapter) => acc + (chapter.videoDuration || 0),
+      0
+    );
   },
 
   userProgress: async ({ id }, _args, { prisma }) => {
@@ -30,7 +33,7 @@ const lessonResolver: LessonResolvers = {
     const chapters = rawChapters.map((chapter) => ({
       isVideoWatchedByUser: getIsVideoWatchedByUser(
         chapter.usersVideoProgress[0]?.watchedUntil || 0,
-        chapter.videoDuration
+        chapter.videoDuration || 0
       ),
       isQuizCompletedByUser: chapter.chapterQuestionsAnswers.length > 0,
       ...chapter,

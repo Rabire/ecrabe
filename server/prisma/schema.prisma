@@ -52,8 +52,8 @@ model Chapter {
   order           Int      @default(autoincrement())
   title           String
   markdownContent String?
-  videoPath       String
-  videoDuration   Int
+  videoPath       String?
+  videoDuration   Int?
   updatedAt       DateTime @updatedAt
 
   lessonId String

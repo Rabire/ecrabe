@@ -64,8 +64,8 @@ export type Chapter = {
   /** Percentage of video watched by user */
   userVideoWatchProgress: Scalars["Int"]["output"];
   /** Duration of the video in seconds. */
-  videoDuration: Scalars["Int"]["output"];
-  videoUrl: Scalars["String"]["output"];
+  videoDuration?: Maybe<Scalars["Int"]["output"]>;
+  videoUrl?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type ChapterInput = {
@@ -465,8 +465,12 @@ export type ChapterResolvers<
     ParentType,
     ContextType
   >;
-  videoDuration?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  videoUrl?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  videoDuration?: Resolver<
+    Maybe<ResolversTypes["Int"]>,
+    ParentType,
+    ContextType
+  >;
+  videoUrl?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
