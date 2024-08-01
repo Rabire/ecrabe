@@ -8,12 +8,14 @@ query LessonPage($lessonId: String!) {
     totalDuration
     userProgress
     updatedAt
+
     teacher {
       id
       firstName
       lastName
       fullName
     }
+
     chapters {
       id
       order

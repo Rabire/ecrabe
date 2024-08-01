@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { GetLessonByIdQuery } from "@/src/types/graphql-generated";
+import { TeacherLessonsPageQuery } from "@/src/types/graphql-generated";
 
-const LessonChapters = ({ lessonData }: { lessonData: GetLessonByIdQuery }) => (
+const LessonChapters = ({
+  lessonData,
+}: {
+  lessonData: TeacherLessonsPageQuery;
+}) => (
   <div>
     <h1>Chapters</h1>
     <Button variant="outline">Ajouter un chapitre</Button>
