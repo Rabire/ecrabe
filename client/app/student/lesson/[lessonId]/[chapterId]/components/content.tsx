@@ -62,9 +62,7 @@ const ChapterContent = () => {
       </div>
 
       <div>
-        <h2 className="mb-1">
-          Partagez vos questions et commentaires à propos de cette leçon.
-        </h2>
+        <h2 className="mb-1">Partagez commentaires et posez vos questions.</h2>
         <p className="text-muted-foreground">
           Vos retours nous aident à nous améliorer ! Si vous êtes bloqué ou
           confus, faites-le nous savoir.

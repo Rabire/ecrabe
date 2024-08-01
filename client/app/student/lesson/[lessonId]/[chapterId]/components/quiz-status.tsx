@@ -29,7 +29,7 @@ const QuizStatus = () => {
       </p>
 
       <Button
-        variant="outline"
+        variant="ghost"
         className="ml-auto text-primary-foreground hover:bg-inherit hover:text-inherit"
         onClick={() => setQuizState(undefined)}
       >

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from "@/components/ui/form";
+import { fireConfettiFromElement } from "@/lib/confetti";
 import { useSubmitQuizMutation } from "@/src/types/graphql-generated";
 import { useChapterPage } from "../context";
 import QuizQuestion from "./quiz-question";
@@ -23,13 +24,12 @@ const QuizSection = () => {
 
   const [submitAnswers, { loading }] = useSubmitQuizMutation({
     onError: () => {
-      // errorToast();
+      // TODO: errorToast();
     },
     onCompleted: ({ submitQuiz }) => {
       if (submitQuiz.isValid) {
         setQuizState("success");
-        // TODO: confetti
-        // fireConfettiFromElement(buttonRef.current);
+        fireConfettiFromElement(buttonRef.current);
       } else {
         setQuizState("failed");
         submitQuiz.incorrectQuestionsId.forEach((questionId) =>
