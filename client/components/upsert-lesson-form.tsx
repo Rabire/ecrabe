@@ -11,6 +11,7 @@ import { z } from "zod";
 import FileField from "./form-field/file-field";
 import TextField from "./form-field/text-field";
 import TextAreaField from "./form-field/textarea-field";
+import MdEditor from "./md-editor";
 
 const schema = z.object({
   description: z.string(),
@@ -52,7 +53,11 @@ const UpsertLessonForm = ({
           <div className="grid gap-2">
             <TextField name="title" placeholder="Titre" />
             <TextAreaField name="description" placeholder="Description" />
-            <TextAreaField
+            {/* <TextAreaField
+              name="markdownContent"
+              placeholder="Contenue du cours (Markdown)"
+            /> */}
+            <MdEditor
               name="markdownContent"
               placeholder="Contenue du cours (Markdown)"
             />

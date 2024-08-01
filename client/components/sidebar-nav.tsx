@@ -1,7 +1,7 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -11,7 +11,8 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
-  const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
   const { id } = useParams();
 
   return (
@@ -28,7 +29,7 @@ const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
           href={`/teacher/lesson/${id}/?tab=${item.tab}`}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            pathName.includes(item.tab)
+            tab?.includes(item.tab)
               ? "bg-muted hover:bg-muted"
               : "hover:bg-transparent hover:underline",
             "justify-start",

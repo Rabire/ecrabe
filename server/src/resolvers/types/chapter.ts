@@ -55,12 +55,13 @@ const chapterResolver: ChapterResolvers = {
     return prisma.chapter.findUniqueOrThrow({ where: { id } }).questions();
   },
 
-  // comments: ({ id }, _args, { prisma }) => {
-  //   return prisma.chapter.findUniqueOrThrow({ where: { id } }).comments({
-  //     where: { deletedAt: null, editedCommentId: null },
-  //     orderBy: { createdAt: "desc" },
-  //   });
-  // }, // FIXME:
+  comments: ({ id }, _args, { prisma }) => {
+    return [];
+    //   return prisma.chapter.findUniqueOrThrow({ where: { id } }).comments({
+    //     where: { deletedAt: null, editedCommentId: null },
+    //     orderBy: { createdAt: "desc" },
+    //   });
+  }, // FIXME:
 
   hasQuestions: async ({ id }, _args, { prisma }) => {
     const questions = await prisma.chapter
