@@ -44,6 +44,9 @@ dependencies:
   artplayer:
     specifier: ^5.1.6
     version: 5.1.6
+  canvas-confetti:
+    specifier: ^1.9.3
+    version: 1.9.3
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -127,6 +130,9 @@ devDependencies:
   '@graphql-codegen/typescript-react-apollo':
     specifier: ^4.0.0
     version: 4.0.0(graphql-tag@2.12.6)(graphql@16.9.0)
+  '@types/canvas-confetti':
+    specifier: ^1.6.4
+    version: 1.6.4
   '@types/dompurify':
     specifier: ^3.0.5
     version: 3.0.5
@@ -2637,6 +2643,10 @@ packages:
       tslib: 2.6.3
     dev: false
 
+  /@types/canvas-confetti@1.6.4:
+    resolution: {integrity: sha512-fNyZ/Fdw/Y92X0vv7B+BD6ysHL4xVU5dJcgzgxLdGbn8O3PezZNIJpml44lKM0nsGur+o/6+NZbZeNTt00U1uA==}
+    dev: true
+
   /@types/cookie@0.6.0:
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
     dev: false
@@ -3345,6 +3355,10 @@ packages:
 
   /caniuse-lite@1.0.30001639:
     resolution: {integrity: sha512-eFHflNTBIlFwP2AIKaYuBQN/apnUoKNhBdza8ZnW/h2di4LCZ4xFqYlxUxo+LQ76KFI1PGcC1QDxMbxTZpSCAg==}
+
+  /canvas-confetti@1.9.3:
+    resolution: {integrity: sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g==}
+    dev: false
 
   /capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
