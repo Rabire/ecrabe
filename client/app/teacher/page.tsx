@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { useTeacherHomePageQuery } from "@/src/types/graphql-generated";
-import { logout } from "@/store/access-token";
 import Link from "next/link";
 import CreateLessonModal from "./components/create-lesson-modal";
 
@@ -14,20 +13,16 @@ export default function TeacherHome() {
 
   return (
     <main>
-      <h1>Teacher home page</h1>
+      <h1>Vos formations</h1>
 
       <CreateLessonModal />
 
-      {/* TODO: replace buttons with cards for each lesson */}
       {lessons?.map((lesson) => (
         <Button variant="outline" key={lesson.id} asChild>
+          {/* TODO: replace buttons with cards */}
           <Link href={`/teacher/lesson/${lesson.id}`}>{lesson.title}</Link>
         </Button>
       ))}
-
-      <Button variant="ghost" onClick={logout}>
-        Déconnexion
-      </Button>
     </main>
   );
 }

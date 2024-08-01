@@ -46,7 +46,7 @@ const MenuDropdown = ({ className }: Props) => (
       <DropdownMenuItem asChild>
         <Link href="/teacher">
           <GraduationCapIcon size={16} />
-          <span className="ml-2">Devenir formateur</span>
+          <span className="ml-2">Espace formateur</span>
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild>
