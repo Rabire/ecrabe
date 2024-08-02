@@ -1,7 +1,7 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -11,33 +11,39 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
-  const pathName = usePathname();
-  const { id } = useParams();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
+
+  const { lessonId } = useParams();
+
+  // TODO: handle active tab style
 
   return (
-    <nav
-      className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className,
-      )}
-      {...props}
-    >
-      {items.map((item) => (
-        <Link
-          key={item.tab}
-          href={`/teacher/lesson/${id}/?tab=${item.tab}`}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            pathName.includes(item.tab)
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start",
-          )}
-        >
-          {item.title}
-        </Link>
-      ))}
-    </nav>
+    <aside className="px-2 lg:w-1/5">
+      <nav
+        className={cn(
+          "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
+          className,
+        )}
+        {...props}
+      >
+        {items.map((item) => (
+          <Link
+            key={item.tab}
+            href={`/teacher/lesson/${lessonId}/?tab=${item.tab}`}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              tab?.includes(item.tab)
+                ? "bg-muted hover:bg-muted"
+                : "hover:bg-transparent hover:underline",
+              "justify-start",
+            )}
+          >
+            {item.title}
+          </Link>
+        ))}
+      </nav>
+    </aside>
   );
 };
 

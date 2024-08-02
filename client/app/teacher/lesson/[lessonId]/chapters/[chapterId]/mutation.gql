@@ -1,0 +1,21 @@
+mutation EditChapter(
+  $lessonId: String!
+  $input: ChapterInput!
+  $chapterId: String
+  $videoFile: Upload
+) {
+  upsertChapter(
+    lessonId: $lessonId
+    input: $input
+    chapterId: $chapterId
+    videoFile: $videoFile
+  ) {
+    id
+    questions {
+      id
+      question
+      answers
+      correctAnswer
+    }
+  }
+}

@@ -38,8 +38,8 @@ export type Chapter = {
   /** Percentage of video watched by user */
   userVideoWatchProgress: Scalars['Int']['output'];
   /** Duration of the video in seconds. */
-  videoDuration: Scalars['Int']['output'];
-  videoUrl: Scalars['String']['output'];
+  videoDuration?: Maybe<Scalars['Int']['output']>;
+  videoUrl?: Maybe<Scalars['String']['output']>;
 };
 
 export type ChapterInput = {
@@ -279,7 +279,7 @@ export type ChapterPageQueryVariables = Exact<{
 }>;
 
 
-export type ChapterPageQuery = { __typename?: 'Query', chapter: { __typename?: 'Chapter', id: string, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl: string, videoDuration: number, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, lesson: { __typename?: 'Lesson', id: string, title: string, pictureUrl?: string | null, chapters: Array<{ __typename?: 'Chapter', id: string, title: string, isVideoWatchedByUser: boolean, isQuizCompletedByUser: boolean, hasQuestions: boolean }> }, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string> }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string } }> } };
+export type ChapterPageQuery = { __typename?: 'Query', chapter: { __typename?: 'Chapter', id: string, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, lesson: { __typename?: 'Lesson', id: string, title: string, pictureUrl?: string | null, chapters: Array<{ __typename?: 'Chapter', id: string, title: string, isVideoWatchedByUser: boolean, isQuizCompletedByUser: boolean, hasQuestions: boolean }> }, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string> }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string } }> } };
 
 export type LessonPageQueryVariables = Exact<{
   lessonId: Scalars['String']['input'];
@@ -287,6 +287,23 @@ export type LessonPageQueryVariables = Exact<{
 
 
 export type LessonPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', id: string, title: string, description?: string | null, pictureUrl?: string | null, markdownContent?: string | null, totalDuration: number, userProgress: number, updatedAt?: Date | null, teacher: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string }, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, hasQuestions: boolean }> } };
+
+export type EditChapterMutationVariables = Exact<{
+  lessonId: Scalars['String']['input'];
+  input: ChapterInput;
+  chapterId?: InputMaybe<Scalars['String']['input']>;
+  videoFile?: InputMaybe<Scalars['Upload']['input']>;
+}>;
+
+
+export type EditChapterMutation = { __typename?: 'Mutation', upsertChapter: { __typename?: 'Chapter', id: string, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }> } };
+
+export type ChapterQueryVariables = Exact<{
+  chapterId: Scalars['String']['input'];
+}>;
+
+
+export type ChapterQuery = { __typename?: 'Query', chapter: { __typename?: 'Chapter', id: string, order: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, lesson: { __typename?: 'Lesson', id: string } } };
 
 export type UpsertChapterMutationVariables = Exact<{
   lessonId: Scalars['String']['input'];
@@ -317,7 +334,7 @@ export type TeacherLessonsPageQueryVariables = Exact<{
 }>;
 
 
-export type TeacherLessonsPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', description?: string | null, id: string, markdownContent?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, userProgress: number, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl: string, videoDuration: number, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', fullName: string, id: string } }> }> } };
+export type TeacherLessonsPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', description?: string | null, id: string, markdownContent?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, userProgress: number, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', fullName: string, id: string } }> }> } };
 
 export type TeacherHomePageQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
@@ -602,6 +619,107 @@ export function useLessonPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type LessonPageQueryHookResult = ReturnType<typeof useLessonPageQuery>;
 export type LessonPageLazyQueryHookResult = ReturnType<typeof useLessonPageLazyQuery>;
 export type LessonPageQueryResult = Apollo.QueryResult<LessonPageQuery, LessonPageQueryVariables>;
+export const EditChapterDocument = gql`
+    mutation EditChapter($lessonId: String!, $input: ChapterInput!, $chapterId: String, $videoFile: Upload) {
+  upsertChapter(
+    lessonId: $lessonId
+    input: $input
+    chapterId: $chapterId
+    videoFile: $videoFile
+  ) {
+    id
+    questions {
+      id
+      question
+      answers
+      correctAnswer
+    }
+  }
+}
+    `;
+export type EditChapterMutationFn = Apollo.MutationFunction<EditChapterMutation, EditChapterMutationVariables>;
+
+/**
+ * __useEditChapterMutation__
+ *
+ * To run a mutation, you first call `useEditChapterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditChapterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editChapterMutation, { data, loading, error }] = useEditChapterMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *      input: // value for 'input'
+ *      chapterId: // value for 'chapterId'
+ *      videoFile: // value for 'videoFile'
+ *   },
+ * });
+ */
+export function useEditChapterMutation(baseOptions?: Apollo.MutationHookOptions<EditChapterMutation, EditChapterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditChapterMutation, EditChapterMutationVariables>(EditChapterDocument, options);
+      }
+export type EditChapterMutationHookResult = ReturnType<typeof useEditChapterMutation>;
+export type EditChapterMutationResult = Apollo.MutationResult<EditChapterMutation>;
+export type EditChapterMutationOptions = Apollo.BaseMutationOptions<EditChapterMutation, EditChapterMutationVariables>;
+export const ChapterDocument = gql`
+    query Chapter($chapterId: String!) {
+  chapter(chapterId: $chapterId) {
+    id
+    order
+    title
+    markdownContent
+    updatedAt
+    videoUrl
+    videoDuration
+    isQuizCompletedByUser
+    isVideoWatchedByUser
+    userVideoWatchProgress
+    hasQuestions
+    questions {
+      id
+      question
+      answers
+      correctAnswer
+    }
+    lesson {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useChapterQuery__
+ *
+ * To run a query within a React component, call `useChapterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChapterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChapterQuery({
+ *   variables: {
+ *      chapterId: // value for 'chapterId'
+ *   },
+ * });
+ */
+export function useChapterQuery(baseOptions: Apollo.QueryHookOptions<ChapterQuery, ChapterQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChapterQuery, ChapterQueryVariables>(ChapterDocument, options);
+      }
+export function useChapterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChapterQuery, ChapterQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChapterQuery, ChapterQueryVariables>(ChapterDocument, options);
+        }
+export type ChapterQueryHookResult = ReturnType<typeof useChapterQuery>;
+export type ChapterLazyQueryHookResult = ReturnType<typeof useChapterLazyQuery>;
+export type ChapterQueryResult = Apollo.QueryResult<ChapterQuery, ChapterQueryVariables>;
 export const UpsertChapterDocument = gql`
     mutation UpsertChapter($lessonId: String!, $input: ChapterInput!, $videoFile: Upload) {
   upsertChapter(lessonId: $lessonId, input: $input, videoFile: $videoFile) {

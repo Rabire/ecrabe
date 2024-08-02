@@ -1,6 +1,7 @@
 "use client";
 
 import TextField from "@/components/form-field/text-field";
+import { LoadingWheel } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,19 +13,21 @@ import {
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { useCreateLessonMutation } from "@/src/types/graphql-generated";
+import { ArrowRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
 
 const CreateLessonModal = () => {
   const router = useRouter();
   const form = useForm();
+  // TODO: zod
+  // TODO: default values
 
   const [createLesson, { loading }] = useCreateLessonMutation({
     onCompleted: (data) => {
       router.push(`/teacher/lesson/${data.createLesson.id}`);
     },
-    onError: (error) => {
-      console.error(error);
+    onError: () => {
       // TODO: handle error with toast
     },
   });
@@ -52,7 +55,14 @@ const CreateLessonModal = () => {
             <TextField name="title" label="Titre" />
 
             <DialogFooter>
-              <Button type="submit">{loading ? "Loading..." : "Créer"}</Button>
+              <Button type="submit" disabled={loading}>
+                <span>Créer la formation</span>
+                {loading ? (
+                  <LoadingWheel size={16} />
+                ) : (
+                  <ArrowRightIcon size={16} />
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

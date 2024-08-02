@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingWheel } from "@/components/loader";
 import UpsertLessonForm from "@/components/upsert-lesson-form";
 import { useTeacherLessonsPageQuery } from "@/src/types/graphql-generated";
 import { useParams, useSearchParams } from "next/navigation";
@@ -10,23 +11,36 @@ import LessonStudents from "./students/students";
 const LessonInfo = () => {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
-  const params = useParams<{ id: string }>();
+  const { lessonId } = useParams<{ lessonId: string }>();
 
   const { data, loading } = useTeacherLessonsPageQuery({
-    variables: { lessonId: params.id },
+    variables: { lessonId },
   });
 
-  if (!data) return null;
+  const getTabContent = () => {
+    if (!data) return null;
+
+    switch (tab) {
+      case "students":
+        return <LessonStudents />;
+
+      case "chapters":
+        return <LessonChapters lessonData={data} />;
+
+      case "billing":
+        return <LessonBilling />;
+
+      default:
+        return <UpsertLessonForm lessonData={data} />;
+    }
+  };
 
   return (
     <main>
-      {loading && <p>loading...</p>}
-      {tab === "students" && <LessonStudents />}
-      {tab === "chapters" && <LessonChapters lessonData={data} />}
-      {tab === "billing" && <LessonBilling />}
-      {(tab === "home" || tab === "" || !tab) && (
-        <UpsertLessonForm lessonData={data} />
-      )}
+      {loading && <LoadingWheel />}
+      {/* if error TODO: handle */}
+
+      {getTabContent()}
     </main>
   );
 };

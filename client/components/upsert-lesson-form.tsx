@@ -5,18 +5,21 @@ import {
   useUpdateLessonMutation,
 } from "@/src/types/graphql-generated";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SaveIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FileField from "./form-field/file-field";
 import TextField from "./form-field/text-field";
 import TextAreaField from "./form-field/textarea-field";
+import { LoadingWheel } from "./loader";
+import MdEditor from "./md-editor";
 
 const schema = z.object({
   description: z.string(),
   title: z.string(),
   markdownContent: z.string(),
-  // pictureFile: z.instanceof(File).optional(),
+  // pictureFile: z.instanceof(File).optional(), // FIXME:
 });
 
 type FormSchema = z.infer<typeof schema>;
@@ -26,7 +29,8 @@ const UpsertLessonForm = ({
 }: {
   lessonData: TeacherLessonsPageQuery;
 }) => {
-  const { id } = useParams();
+  const { lessonId } = useParams<{ lessonId: string }>();
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -42,28 +46,30 @@ const UpsertLessonForm = ({
   });
 
   async function onSubmit(formValues: FormSchema) {
-    upsert({ variables: { lessonId: id as string, input: { ...formValues } } });
+    upsert({ variables: { lessonId, input: { ...formValues } } });
   }
 
   return (
     <Form {...form}>
-      <form className="grid gap-6" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid gap-2">
-          <div className="grid gap-2">
-            <TextField name="title" placeholder="Titre" />
-            <TextAreaField name="description" placeholder="Description" />
-            <TextAreaField
-              name="markdownContent"
-              placeholder="Contenue du cours (Markdown)"
-            />
+      <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
+        <TextField name="title" placeholder="Titre" />
+        <TextAreaField name="description" placeholder="Description" />
 
-            <FileField name="pictureFile" placeholder="Image de couverture" />
-          </div>
+        <MdEditor
+          name="markdownContent"
+          placeholder="Contenue du cours (Markdown)"
+        />
 
-          <Button disabled={loading} type="submit">
-            Continuer
-          </Button>
-        </div>
+        <FileField
+          // TODO: peut mieux faire, avec un apercu de l'image et une dropzone
+          name="pictureFile"
+          placeholder="Image de couverture"
+        />
+
+        <Button disabled={loading} type="submit" className="ml-auto flex">
+          <span>Sauvegarder</span>
+          {loading ? <LoadingWheel size={16} /> : <SaveIcon size={16} />}
+        </Button>
       </form>
     </Form>
   );
