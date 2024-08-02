@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 import { useUpsertChapterMutation } from "@/src/types/graphql-generated";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, SaveIcon } from "lucide-react";
@@ -66,10 +67,17 @@ const EditChapterPage = ({ params }: { params: { lessonId: string } }) => {
 
   const [upsertChapter, { loading }] = useUpsertChapterMutation({
     onCompleted: () => {
-      // TODO: do something onCompleted
+      toast({
+        title: "Le chapitre a été modifié avec succès.",
+      });
     },
     onError: () => {
-      // TODO: errorToast
+      toast({
+        variant: "destructive",
+        title: "Impossible de modifier le chapitre.",
+        description:
+          "Une erreur est survenue lors de la modification du chapitre, merci de réessayer dans quelques instant.",
+      });
     },
   });
 
@@ -106,6 +114,8 @@ const EditChapterPage = ({ params }: { params: { lessonId: string } }) => {
             onChange={handleVideoFileChange}
           />
           <p>{videoFile?.name}</p>
+
+          {/* TODO: Ajouter un switch pour rendre le chapitre freemium */}
 
           {/* Ajouter des questions */}
           {fields.map((questionField, index) => (

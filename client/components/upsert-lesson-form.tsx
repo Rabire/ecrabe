@@ -14,6 +14,7 @@ import TextField from "./form-field/text-field";
 import TextAreaField from "./form-field/textarea-field";
 import { LoadingWheel } from "./loader";
 import MdEditor from "./md-editor";
+import { toast } from "./ui/use-toast";
 
 const schema = z.object({
   description: z.string(),
@@ -41,8 +42,19 @@ const UpsertLessonForm = ({
   });
 
   const [upsert, { loading }] = useUpdateLessonMutation({
-    onError: () => null, // TODO: error toast
-    onCompleted: () => null, // TODO: success toast
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "sauvegarde échouée",
+        description:
+          "Une erreur est survenue lors de la sauvegarde de la leçon, veuillez réessayer.",
+      });
+    },
+    onCompleted: () => {
+      toast({
+        title: "Sauvegarde réussie",
+      });
+    },
   });
 
   async function onSubmit(formValues: FormSchema) {

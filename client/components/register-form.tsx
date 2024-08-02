@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TextField from "./form-field/text-field";
+import { toast } from "./ui/use-toast";
 
 const schema = z
   .object({
@@ -53,14 +54,23 @@ const RegisterForm = () => {
   const router = useRouter();
 
   const [register, { loading }] = useRegisterMutation({
-    onError: () => null, // TODO: error toast
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description:
+          "Une erreur s'est produite lors de la création de votre compte. Veuillez réessayer.",
+      });
+    },
     onCompleted: ({ registerUser }) => {
       setTokens(
         registerUser.tokens.accessToken,
         registerUser.tokens.refreshToken,
       );
       router.push(`/${registerUser.user.role.toLocaleLowerCase()}`);
-      // TODO: success toast
+      toast({
+        title: "Votre compte a été créé avec succès.",
+      });
     },
   });
 

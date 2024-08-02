@@ -5,11 +5,16 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { formatSeconds } from "@/lib/format-utils";
 import { TeacherLessonsPageQuery } from "@/src/types/graphql-generated";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 
 type Props = { lessonData: TeacherLessonsPageQuery };
+
+/* const handleDeleteChapter = async (chapterId: string) => {
+  // TODO: handle delete chapter mutation
+}; */
 
 const LessonChapters = ({ lessonData }: Props) => (
   <>
@@ -36,16 +41,25 @@ const LessonChapters = ({ lessonData }: Props) => (
           <AccordionItem value="item-1">
             <AccordionTrigger>{chapter.title}</AccordionTrigger>
             <AccordionContent className="flex justify-between">
-              <p>{chapter.videoDuration} h</p>
+              <p>{formatSeconds(chapter.videoDuration || 0)}</p>
               <p>{chapter.questions.length} question(s)</p>
 
-              <Button asChild>
-                <Link
-                  href={`/teacher/lesson/${lessonData.lesson?.id}/chapters/${chapter.id}`}
+              <div className="flex gap-2">
+                <Button asChild>
+                  <Link
+                    href={`/teacher/lesson/${lessonData.lesson?.id}/chapters/${chapter.id}`}
+                  >
+                    <span>Éditer</span>
+                  </Link>
+                </Button>
+                <Button
+                  variant="destructive"
+                  /* onClick={() => handleDeleteChapter(chapter.id)} TODO: handle delete chapter mutation */
+                  asChild
                 >
-                  <span>Éditer</span>
-                </Link>
-              </Button>
+                  <span>Supprimer</span>
+                </Button>
+              </div>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

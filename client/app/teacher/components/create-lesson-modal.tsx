@@ -12,23 +12,45 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 import { useCreateLessonMutation } from "@/src/types/graphql-generated";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const zSchema = z.object({
+  title: z.string().min(1),
+});
+
+type FormSchema = z.infer<typeof zSchema>;
 
 const CreateLessonModal = () => {
   const router = useRouter();
-  const form = useForm();
-  // TODO: zod
-  // TODO: default values
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(zSchema),
+    defaultValues: {
+      title: "",
+    },
+  });
+  const { toast } = useToast();
 
   const [createLesson, { loading }] = useCreateLessonMutation({
     onCompleted: (data) => {
       router.push(`/teacher/lesson/${data.createLesson.id}`);
+      toast({
+        title: "La leçon a été créer avec succès.",
+        description: "Vous pouvez maintenant ajouter du contenu à votre leçon.",
+      });
     },
     onError: () => {
-      // TODO: handle error with toast
+      toast({
+        variant: "destructive",
+        title: "Impossible de créer la leçon.",
+        description:
+          "Une erreur est survenue lors de la création de la leçon, merci de réessayer dans quelques instant.",
+      });
     },
   });
 

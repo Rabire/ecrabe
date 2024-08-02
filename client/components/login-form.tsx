@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TextField from "./form-field/text-field";
+import { toast } from "./ui/use-toast";
 
 const schema = z.object({
   email: z.string().email(),
@@ -23,11 +24,19 @@ const LoginForm = () => {
   const router = useRouter();
 
   const [login, { loading }] = useLoginMutation({
-    onError: () => null, // TODO: error toast
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Connexion échouée",
+        description: "Identifiants incorrects.",
+      });
+    },
     onCompleted: ({ loginUser }) => {
       setTokens(loginUser.tokens.accessToken, loginUser.tokens.refreshToken);
       router.push(`/${loginUser.user.role.toLocaleLowerCase()}`);
-      // TODO: success toast
+      toast({
+        title: "Connexion réussie",
+      });
     },
   });
 
