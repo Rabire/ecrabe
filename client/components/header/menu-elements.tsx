@@ -10,11 +10,11 @@ type Props = { className?: string };
 const STUDENT_ELEMENTS = [
   { href: "/student", text: "Accueil", icon: HomeIcon },
   {
-    href: "/student/lessons",
+    href: "/student/lesson",
     text: "Votre bibliothèque",
     icon: BookMarkedIcon,
   },
-  { href: "/student/shop", text: "Librairie", icon: LibraryBig },
+  { href: "/student/library", text: "Librairie", icon: LibraryBig },
 ];
 
 const TEACHER_ELEMENTS = [

@@ -1,4 +1,5 @@
 import TailwindIndicator from "@/components/tailwind-indicator";
+import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body className={cn("relative", inter.className)}>
         <TailwindIndicator />
         {children}
+        <Toaster />
       </body>
     </html>
   );

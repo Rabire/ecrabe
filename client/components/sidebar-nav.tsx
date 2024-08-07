@@ -16,7 +16,10 @@ const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
 
   const { lessonId } = useParams();
 
-  // TODO: handle active tab style
+  const isTabActive = (currentTab: string | null, itemTab: string) => {
+    if ((!currentTab || currentTab === "") && itemTab === "") return true;
+    return currentTab === itemTab;
+  };
 
   return (
     <aside className="px-2 lg:w-1/5">
@@ -33,7 +36,7 @@ const SidebarNav = ({ className, items, ...props }: SidebarNavProps) => {
             href={`/teacher/lesson/${lessonId}/?tab=${item.tab}`}
             className={cn(
               buttonVariants({ variant: "ghost" }),
-              tab?.includes(item.tab)
+              isTabActive(tab, item.tab)
                 ? "bg-muted hover:bg-muted"
                 : "hover:bg-transparent hover:underline",
               "justify-start",

@@ -13,7 +13,7 @@ const LessonInfo = () => {
   const tab = searchParams.get("tab");
   const { lessonId } = useParams<{ lessonId: string }>();
 
-  const { data, loading } = useTeacherLessonsPageQuery({
+  const { data, loading, error } = useTeacherLessonsPageQuery({
     variables: { lessonId },
   });
 
@@ -37,8 +37,17 @@ const LessonInfo = () => {
 
   return (
     <main>
-      {loading && <LoadingWheel />}
-      {/* if error TODO: handle */}
+      {loading && (
+        <div className="text-center">
+          <LoadingWheel />
+        </div>
+      )}
+
+      {error && (
+        <div className="error">
+          Une erreur est survenue lors du chargement de la leçon.
+        </div>
+      )}
 
       {getTabContent()}
     </main>
