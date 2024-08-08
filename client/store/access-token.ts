@@ -7,9 +7,9 @@ export const $accessToken = persistentAtom<string | null>(
   { encode: JSON.stringify, decode: JSON.parse },
 );
 
-const cookies = new Cookies(null, { path: "/" });
+const COOKIE_NAME = process.env.NEXT_PUBLIC_COOKIE_NAME || "COOKIE_NAME";
 
-const COOKIE_NAME = process.env.COOKIE_NAME || "COOKIE_NAME";
+const cookies = new Cookies(null, { path: "/" });
 
 export const setTokens = (accessToken: string, refreshToken: string) => {
   $accessToken.set(accessToken);

@@ -7,7 +7,7 @@ import { HttpLink } from "@apollo/client/link/http";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies(null, { path: "/" });
-const COOKIE_NAME = process.env.COOKIE_NAME || "COOKIE_NAME";
+const COOKIE_NAME = process.env.NEXT_PUBLIC_COOKIE_NAME || "COOKIE_NAME";
 
 const headersLink = setContext((_, { headers }) => ({
   headers: {
@@ -27,6 +27,8 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   );
 
   if (isTokenInvalid) {
+    console.info("Triggering token refresh");
+
     return new Observable((observer) => {
       (async () => {
         try {

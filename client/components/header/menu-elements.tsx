@@ -40,6 +40,7 @@ const MenuElements = ({ className }: Props) => {
     <div className={cn("gap-2", className)}>
       {elements.map((element) => (
         <Button
+          key={element.href}
           asChild
           variant="outline"
           className={cn(pathname === element.href && "border-primary")}
