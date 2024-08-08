@@ -130,8 +130,11 @@ export type Mutation = {
   __typename?: "Mutation";
   /** Admin only - Create a category */
   createCategory: Category;
+  createComment: Comment;
   /** Create a lesson */
   createLesson: Lesson;
+  deleteComment: Comment;
+  editComment: Comment;
   /** Login a user using email and password */
   loginUser: UserWithTokens;
   /** Update chapters position */
@@ -154,8 +157,22 @@ export type MutationCreateCategoryArgs = {
   name: Scalars["String"]["input"];
 };
 
+export type MutationCreateCommentArgs = {
+  chapterId: Scalars["String"]["input"];
+  content: Scalars["String"]["input"];
+};
+
 export type MutationCreateLessonArgs = {
   title: Scalars["String"]["input"];
+};
+
+export type MutationDeleteCommentArgs = {
+  commentId: Scalars["String"]["input"];
+};
+
+export type MutationEditCommentArgs = {
+  commentId: Scalars["String"]["input"];
+  content: Scalars["String"]["input"];
 };
 
 export type MutationLoginUserArgs = {
@@ -618,11 +635,29 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateCategoryArgs, "name">
   >;
+  createComment?: Resolver<
+    ResolversTypes["Comment"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateCommentArgs, "chapterId" | "content">
+  >;
   createLesson?: Resolver<
     ResolversTypes["Lesson"],
     ParentType,
     ContextType,
     RequireFields<MutationCreateLessonArgs, "title">
+  >;
+  deleteComment?: Resolver<
+    ResolversTypes["Comment"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteCommentArgs, "commentId">
+  >;
+  editComment?: Resolver<
+    ResolversTypes["Comment"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditCommentArgs, "commentId" | "content">
   >;
   loginUser?: Resolver<
     ResolversTypes["UserWithTokens"],

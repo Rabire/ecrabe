@@ -40,7 +40,14 @@ type Mutation {
     chaptersOrder: [ChapterOrderInput!]!
   ): Boolean!
 
-  # TODO: crud comments
+  #  "Add a new comment and connect it to a contact"
+  createComment(chapterId: String!, content: String!): Comment!
+
+  # "Soft delete a comment"
+  deleteComment(commentId: String!): Comment!
+
+  # "Edit an existing comment"
+  editComment(commentId: String!, content: String!): Comment!
 }
 
 type SubmitQuizResponse {
