@@ -22,11 +22,22 @@ type Mutation {
     videoFile: Upload
   ): Chapter!
 
+  "Create a user"
   registerUser(input: RegisterInput!): UserWithTokens!
 
+  "Login a user using email and password"
   loginUser(email: String!, password: String!): UserWithTokens!
 
+  "Use cookie to refresh the access token"
   refreshToken: Tokens!
+
+  "Admin only - Create a category"
+  createCategory(name: String!): Category!
+
+  "Admin only - Update chapters position"
+  orderChapters(chaptersOrder: [ChapterOrder!]!): [ChapterOrder!]!
+
+  # TODO: crud comments
 }
 
 type SubmitQuizResponse {
@@ -42,4 +53,9 @@ type Tokens {
 type UserWithTokens {
   user: User!
   tokens: Tokens!
+}
+
+type ChapterOrder {
+  chapterId: String!
+  position: Int!
 }

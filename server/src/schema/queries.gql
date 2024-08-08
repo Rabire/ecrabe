@@ -1,6 +1,9 @@
 type Query {
   "Retrieves all lessons"
-  lessons: [Lesson!]!
+  browseLessons(category: String, search: String): [Lesson!]!
+
+  "Retrieves all categories"
+  categories: [Category!]!
 
   "Retrieves a lesson by id"
   lesson(lessonId: String!): Lesson!

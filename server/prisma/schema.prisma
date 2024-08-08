@@ -43,6 +43,7 @@ model Lesson {
   description     String?
   picturePath     String?
   markdownContent String?
+  isPublished     Boolean @default(false)
 
   chapters  Chapter[]
   purchases Purchase[]
@@ -50,8 +51,8 @@ model Lesson {
   teacherId String
   teacher   User   @relation(fields: [teacherId], references: [id])
 
-  categoryId String?
-  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryName String?
+  category     Category? @relation(fields: [categoryName], references: [name])
 }
 
 model Chapter {
@@ -140,7 +141,6 @@ model Purchase {
 }
 
 model Category {
-  id      String   @id @default(uuid())
   name    String   @unique
   lessons Lesson[]
 }

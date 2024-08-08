@@ -37,24 +37,42 @@ const rules = {
       return true;
     }
   ),
+
+  isLessonOwner: rule()(
+    async (_parent, { lessonId }, { userId, prisma }: GraphQLContext) => {
+      if (!lessonId) return true;
+
+      const chapter = await prisma.lesson.findUnique({
+        where: { id: lessonId },
+      });
+
+      if (chapter?.teacherId !== userId) return "User is not the lesson owner";
+
+      return true;
+    }
+  ),
 };
 
 const permissions = shield(
   {
     Query: {
-      lessons: rules.isAuth,
+      browseLessons: rules.isAuth,
+      categories: rules.isAuth,
       lesson: rules.isAuth,
       chapter: rules.isAuth,
       users: rules.isAdmin,
       user: rules.isCurrentUser,
     },
     Mutation: {
-      // editComment: and(rules.isAuth, or(rules.isCommentAuthor, rules.isAdmin)),
       submitQuiz: rules.isAuth,
       saveVideoProgress: rules.isAuth,
       createLesson: rules.isAuth,
       updateLesson: rules.isAuth,
-      upsertChapter: rules.isAuth,
+      upsertChapter: rules.isLessonOwner,
+      // registerUser
+      // loginUser
+      // refreshToken
+      createCategory: rules.isAdmin,
     },
   },
   { allowExternalErrors: true }

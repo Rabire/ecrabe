@@ -11,6 +11,7 @@ import {
   Chapter as ChapterModel,
   Question as QuestionModel,
   Purchase as PurchaseModel,
+  Category as CategoryModel,
 } from "@prisma/client";
 import { GraphQLContext } from "../middleware/context";
 export type Maybe<T> = T | null;
@@ -87,6 +88,12 @@ export type ChapterInput = {
   videoDuration: Scalars["Int"]["input"];
 };
 
+export type ChapterOrder = {
+  __typename?: "ChapterOrder";
+  chapterId: Scalars["String"]["output"];
+  position: Scalars["Int"]["output"];
+};
+
 export type Comment = {
   __typename?: "Comment";
   author: User;
@@ -122,9 +129,11 @@ export type LessonInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  createCategory: Category;
   /** Create a lesson */
   createLesson: Lesson;
   loginUser: UserWithTokens;
+  orderChapters: Array<ChapterOrder>;
   refreshToken: Tokens;
   registerUser: UserWithTokens;
   /** Upsert a user video watch progress */
@@ -137,6 +146,10 @@ export type Mutation = {
   upsertChapter: Chapter;
 };
 
+export type MutationCreateCategoryArgs = {
+  name: Scalars["String"]["input"];
+};
+
 export type MutationCreateLessonArgs = {
   title: Scalars["String"]["input"];
 };
@@ -144,6 +157,10 @@ export type MutationCreateLessonArgs = {
 export type MutationLoginUserArgs = {
   email: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
+};
+
+export type MutationOrderChaptersArgs = {
+  chaptersOrder: Array<ChapterOrder>;
 };
 
 export type MutationRegisterUserArgs = {
@@ -185,16 +202,23 @@ export type Purchase = {
 
 export type Query = {
   __typename?: "Query";
+  /** Retrieves all lessons */
+  browseLessons: Array<Lesson>;
+  /** Retrieves all categories */
+  categories: Array<Category>;
   /** Retrieves a lesson chapter by String */
   chapter: Chapter;
   /** Retrieves a lesson by id */
   lesson: Lesson;
-  /** Retrieves all lessons */
-  lessons: Array<Lesson>;
   /** Retrieves a single user by id, if no id is provided, it will return the current user */
   user: User;
   /** Retrieves all users */
   users: Array<User>;
+};
+
+export type QueryBrowseLessonsArgs = {
+  category?: InputMaybe<Scalars["String"]["input"]>;
+  search?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type QueryChapterArgs = {
@@ -386,11 +410,10 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
-  Category: ResolverTypeWrapper<
-    Omit<Category, "lessons"> & { lessons: Array<ResolversTypes["Lesson"]> }
-  >;
+  Category: ResolverTypeWrapper<CategoryModel>;
   Chapter: ResolverTypeWrapper<ChapterModel>;
   ChapterInput: ChapterInput;
+  ChapterOrder: ResolverTypeWrapper<ChapterOrder>;
   Comment: ResolverTypeWrapper<CommentModel>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
@@ -418,11 +441,10 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"]["output"];
-  Category: Omit<Category, "lessons"> & {
-    lessons: Array<ResolversParentTypes["Lesson"]>;
-  };
+  Category: CategoryModel;
   Chapter: ChapterModel;
   ChapterInput: ChapterInput;
+  ChapterOrder: ChapterOrder;
   Comment: CommentModel;
   DateTime: Scalars["DateTime"]["output"];
   ID: Scalars["ID"]["output"];
@@ -510,6 +532,16 @@ export type ChapterResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ChapterOrderResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends
+    ResolversParentTypes["ChapterOrder"] = ResolversParentTypes["ChapterOrder"],
+> = ResolversObject<{
+  chapterId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type CommentResolvers<
   ContextType = GraphQLContext,
   ParentType extends
@@ -585,6 +617,12 @@ export type MutationResolvers<
   ParentType extends
     ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = ResolversObject<{
+  createCategory?: Resolver<
+    ResolversTypes["Category"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateCategoryArgs, "name">
+  >;
   createLesson?: Resolver<
     ResolversTypes["Lesson"],
     ParentType,
@@ -596,6 +634,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationLoginUserArgs, "email" | "password">
+  >;
+  orderChapters?: Resolver<
+    Array<ResolversTypes["ChapterOrder"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationOrderChaptersArgs, "chaptersOrder">
   >;
   refreshToken?: Resolver<ResolversTypes["Tokens"], ParentType, ContextType>;
   registerUser?: Resolver<
@@ -650,6 +694,17 @@ export type QueryResolvers<
   ParentType extends
     ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
+  browseLessons?: Resolver<
+    Array<ResolversTypes["Lesson"]>,
+    ParentType,
+    ContextType,
+    Partial<QueryBrowseLessonsArgs>
+  >;
+  categories?: Resolver<
+    Array<ResolversTypes["Category"]>,
+    ParentType,
+    ContextType
+  >;
   chapter?: Resolver<
     ResolversTypes["Chapter"],
     ParentType,
@@ -662,7 +717,6 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryLessonArgs, "lessonId">
   >;
-  lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
   user?: Resolver<
     ResolversTypes["User"],
     ParentType,
@@ -758,6 +812,7 @@ export type UserWithTokensResolvers<
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   Category?: CategoryResolvers<ContextType>;
   Chapter?: ChapterResolvers<ContextType>;
+  ChapterOrder?: ChapterOrderResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Lesson?: LessonResolvers<ContextType>;

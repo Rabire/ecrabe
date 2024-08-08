@@ -60,7 +60,10 @@ const lessonResolver: LessonResolvers = {
   },
 
   chapters: ({ id }, _args, { prisma }) => {
+    const isOwner = true; // TODO: unmock
+
     return prisma.lesson.findUniqueOrThrow({ where: { id } }).chapters({
+      where: { isPublished: isOwner ? true : undefined },
       orderBy: { position: "asc" },
     });
   },
