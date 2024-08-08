@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/format-utils";
 import { cn } from "@/lib/utils";
 import { Lesson } from "@/src/types/graphql-generated";
 import Image from "next/image";
@@ -12,6 +13,7 @@ type Props = {
     | "pictureUrl"
     | "userProgress"
     | "isPurchasedByCurrentUser"
+    | "price"
   >;
   isTeacher?: boolean;
 };
@@ -37,7 +39,7 @@ const LessonCard = ({ lesson, isTeacher }: Props) => {
               {lesson.description}
             </p>
 
-            {lesson.isPurchasedByCurrentUser && (
+            {!isTeacher && lesson.isPurchasedByCurrentUser && (
               <div className={cn("mt-2 flex items-center gap-2")}>
                 <div className="h-1 w-full overflow-hidden rounded bg-accent">
                   <span
@@ -49,6 +51,12 @@ const LessonCard = ({ lesson, isTeacher }: Props) => {
                   {lesson.userProgress}%
                 </span>
               </div>
+            )}
+
+            {!isTeacher && !lesson.isPurchasedByCurrentUser && lesson.price && (
+              <p className="mt-2 text-end font-medium">
+                {formatPrice(lesson.price)}
+              </p>
             )}
           </div>
         </CardContent>

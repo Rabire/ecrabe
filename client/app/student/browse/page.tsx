@@ -42,6 +42,7 @@ const MOCK_FORMATIONS = [
     },
     userProgress: 0,
     isPurchasedByCurrentUser: false,
+    price: 9.99,
   },
   {
     id: "2",
@@ -146,5 +147,6 @@ const MOCK_FORMATIONS = [
     },
     userProgress: 0,
     isPurchasedByCurrentUser: false,
+    price: 19.99,
   },
 ];
