@@ -411,9 +411,7 @@ export type TeacherLessonsPageQueryVariables = Exact<{
 
 export type TeacherLessonsPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', description?: string | null, id: string, markdownContent?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, userProgress: number, chapters: Array<{ __typename?: 'Chapter', id: string, position: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', fullName: string, id: string } }> }> } };
 
-export type TeacherHomePageQueryVariables = Exact<{
-  userId?: InputMaybe<Scalars['String']['input']>;
-}>;
+export type TeacherHomePageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type TeacherHomePageQuery = { __typename?: 'Query', user: { __typename?: 'User', createdLessons: Array<{ __typename?: 'Lesson', markdownContent?: string | null, id: string, description?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null }> } };
@@ -970,8 +968,8 @@ export type TeacherLessonsPageQueryHookResult = ReturnType<typeof useTeacherLess
 export type TeacherLessonsPageLazyQueryHookResult = ReturnType<typeof useTeacherLessonsPageLazyQuery>;
 export type TeacherLessonsPageQueryResult = Apollo.QueryResult<TeacherLessonsPageQuery, TeacherLessonsPageQueryVariables>;
 export const TeacherHomePageDocument = gql`
-    query TeacherHomePage($userId: String) {
-  user(userId: $userId) {
+    query TeacherHomePage {
+  user {
     createdLessons {
       markdownContent
       id
@@ -997,7 +995,6 @@ export const TeacherHomePageDocument = gql`
  * @example
  * const { data, loading, error } = useTeacherHomePageQuery({
  *   variables: {
- *      userId: // value for 'userId'
  *   },
  * });
  */

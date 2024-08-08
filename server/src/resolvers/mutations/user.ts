@@ -46,6 +46,7 @@ const userMutationsResolvers: MutationResolvers = {
 
   refreshToken: async (_parent, _args, { req, prisma }) => {
     const cookies = JSON.parse((req.headers.cookies as string) || "{}");
+
     const refreshToken = cookies[COOKIE_NAME || "COOKIE_NAME"];
 
     if (!refreshToken) throw new Error("No refresh token");

@@ -34,9 +34,6 @@ const LoginForm = () => {
     onCompleted: ({ loginUser }) => {
       setTokens(loginUser.tokens.accessToken, loginUser.tokens.refreshToken);
       router.push(`/${loginUser.user.role.toLocaleLowerCase()}`);
-      toast({
-        title: "Connexion réussie",
-      });
     },
   });
 

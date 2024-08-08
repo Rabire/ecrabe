@@ -11,6 +11,8 @@ const rules = {
 
   isAdmin: rule()(
     async (_parent, _args, { userId, prisma }: GraphQLContext) => {
+      if (!userId) return "Invalid token";
+
       const user = await prisma.user.findUnique({ where: { id: userId } });
 
       if (user?.role !== Role.ADMIN)
@@ -21,6 +23,8 @@ const rules = {
 
   isCommentAuthor: rule()(
     async (_parent, { commentId }, { userId, prisma }: GraphQLContext) => {
+      if (!userId) return "Invalid token";
+
       const commentFound = await prisma.comment.findUnique({
         where: { id: commentId, authorId: userId },
       });
@@ -32,6 +36,8 @@ const rules = {
 
   isCurrentUser: rule()(
     async (_parent, { userId: userIdParam }, { userId }: GraphQLContext) => {
+      if (!userId) return "Invalid token";
+
       if (!userIdParam) return true;
       if (userId !== userIdParam) return "User is not the current user";
       return true;

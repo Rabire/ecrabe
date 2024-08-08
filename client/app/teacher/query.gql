@@ -1,5 +1,5 @@
-query TeacherHomePage($userId: String) {
-  user(userId: $userId) {
+query TeacherHomePage {
+  user {
     createdLessons {
       markdownContent
       id
