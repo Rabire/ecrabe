@@ -1,36 +1,36 @@
 type Lesson {
   id: ID!
   title: String!
-  "A short description of the lesson."
   description: String
-  "The URL of the cover picture of the lesson."
   pictureUrl: String
-  "A description of the lesson content or presentation - in markdown format."
   markdownContent: String
+  category: Category
+  price: Float
 
   # Computed
-  "Duration of the lesson in seconds."
   totalDuration: Int!
-  "Completion percentage of lessons watch & quiz"
   userProgress: Int!
-  "Date of the last update of a nested chapter."
   updatedAt: DateTime
+  isPurchasedByCurrentUser: Boolean!
+  isCurrentUserTeacher: Boolean!
 
   # Relations
   teacher: User!
   chapters: [Chapter!]!
+  purchases: [Purchase!]!
+}
+
+type Category {
+  id: ID!
+  name: String
+  lessons: [Lesson!]!
 }
 
 input LessonInput {
-  title: String!
-  "The URL of the cover picture of the lesson."
+  title: String
   description: String
-  "A description of the lesson content or presentation - in markdown format."
   markdownContent: String
-  "The file of the cover picture of the lesson."
   pictureFile: Upload
-
-  sortedChapterIds: [String!]
+  category: String
+  price: Float
 }
-
-# TODO: create table LessonType

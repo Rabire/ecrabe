@@ -19,19 +19,22 @@ enum Gender {
 }
 
 model User {
-  id             String   @id @default(uuid())
+  id             String @id @default(uuid())
   firstName      String
   lastName       String
-  email          String   @unique
-  role           Role     @default(STUDENT)
-  lastLogin      DateTime @default(now())
-  firstLogin     DateTime @default(now())
+  email          String @unique
+  role           Role   @default(STUDENT)
   hashedPassword String
 
-  lessons                 Lesson[]
+  lastLogin        DateTime @default(now())
+  firstLogin       DateTime @default(now())
+  stripeCustomerId String
+
+  createdLessons          Lesson[]
   videosProgress          UserVideoProgress[]
   chapterQuestionsAnswers ChapterQuestionsAnswers[]
-  Comment                 Comment[]
+  comments                Comment[]
+  purchases               Purchase[]
 }
 
 model Lesson {
@@ -40,21 +43,28 @@ model Lesson {
   description     String?
   picturePath     String?
   markdownContent String?
+  isPublished     Boolean @default(false)
+  price           Float?
+
+  chapters  Chapter[]
+  purchases Purchase[]
 
   teacherId String
+  teacher   User   @relation(fields: [teacherId], references: [id])
 
-  teacher  User      @relation(fields: [teacherId], references: [id])
-  chapters Chapter[]
+  categoryName String?
+  category     Category? @relation(fields: [categoryName], references: [name])
 }
 
 model Chapter {
-  id              String   @id @default(uuid())
-  order           Int      @default(autoincrement())
+  id              String  @id @default(uuid())
+  position        Int     @default(autoincrement())
   title           String
   markdownContent String?
   videoPath       String?
   videoDuration   Int?
-  updatedAt       DateTime @updatedAt
+  isPublished     Boolean @default(false)
+  isFree          Boolean @default(false)
 
   lessonId String
 
@@ -63,6 +73,9 @@ model Chapter {
   usersVideoProgress      UserVideoProgress[]
   chapterQuestionsAnswers ChapterQuestionsAnswers[]
   comments                Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Question {
@@ -113,4 +126,24 @@ model Comment {
 
   chapterId String?
   chapter   Chapter? @relation(fields: [chapterId], references: [id])
+}
+
+model Purchase {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@unique([userId, lessonId])
+}
+
+model Category {
+  name    String   @unique
+  lessons Lesson[]
 }

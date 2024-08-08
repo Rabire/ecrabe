@@ -1,7 +1,7 @@
 query Chapter($chapterId: String!) {
   chapter(chapterId: $chapterId) {
     id
-    order
+    position
     title
     markdownContent
     updatedAt
@@ -11,12 +11,14 @@ query Chapter($chapterId: String!) {
     isVideoWatchedByUser
     userVideoWatchProgress
     hasQuestions
+
     questions {
       id
       question
       answers
       correctAnswer
     }
+
     lesson {
       id
     }

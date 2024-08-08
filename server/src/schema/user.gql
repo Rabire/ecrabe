@@ -9,7 +9,9 @@ type User {
   firstLogin: DateTime!
 
   # Relations
-  lessons: [Lesson!]!
+  createdLessons: [Lesson!]!
+  comments: [Comment!]!
+  purchases: [Purchase!]!
 
   # Computed
   fullName: String!

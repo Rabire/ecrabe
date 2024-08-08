@@ -1,6 +1,9 @@
 type Query {
   "Retrieves all lessons"
-  lessons: [Lesson!]!
+  browseLessons(category: String, search: String): [Lesson!]!
+
+  "Retrieves all categories"
+  categories: [Category!]!
 
   "Retrieves a lesson by id"
   lesson(lessonId: String!): Lesson!
@@ -13,4 +16,6 @@ type Query {
 
   "Retrieves a single user by id, if no id is provided, it will return the current user"
   user(userId: String): User!
+
+  lessonCheckoutUrl(lessonId: String!): String!
 }

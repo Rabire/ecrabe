@@ -23,7 +23,14 @@ const TextAreaField = (props: FormFieldProps) => {
         <FormItem>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
-            <Textarea placeholder={placeholder || "Non renseigné"} {...field} />
+            <Textarea
+              placeholder={placeholder || "Non renseigné"}
+              {...field}
+              onChange={({ target: { value } }) =>
+                form.setValue(name, value === "" ? null : value)
+              }
+              value={field.value || ""}
+            />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

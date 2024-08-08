@@ -12,10 +12,13 @@ generates:
       mapperTypeSuffix: Model
       mappers:
         User: "@prisma/client#User"
-        # Comment: "@prisma/client#Comment"
+        Comment: "@prisma/client#Comment"
         Lesson: "@prisma/client#Lesson"
         Chapter: "@prisma/client#Chapter"
         Question: "@prisma/client#Question"
+        Purchase: "@prisma/client#Purchase"
+        Category: "@prisma/client#Category"
+
       useIndexSignature: true
       contextType: ../middleware/context#GraphQLContext
       prettierConfig:

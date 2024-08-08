@@ -32,6 +32,10 @@ const TextField = (props: Props) => {
               placeholder={placeholder || "Non renseigné"}
               type={type}
               {...field}
+              onChange={({ target: { value } }) =>
+                form.setValue(name, value === "" ? null : value)
+              }
+              value={field.value || ""}
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}

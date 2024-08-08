@@ -22,11 +22,32 @@ type Mutation {
     videoFile: Upload
   ): Chapter!
 
+  "Create a user"
   registerUser(input: RegisterInput!): UserWithTokens!
 
+  "Login a user using email and password"
   loginUser(email: String!, password: String!): UserWithTokens!
 
+  "Use cookie to refresh the access token"
   refreshToken: Tokens!
+
+  "Admin only - Create a category"
+  createCategory(name: String!): Category!
+
+  "Update chapters position"
+  orderChapters(
+    lessonId: String!
+    chaptersOrder: [ChapterOrderInput!]!
+  ): Boolean!
+
+  #  "Add a new comment and connect it to a contact"
+  createComment(chapterId: String!, content: String!): Comment!
+
+  # "Soft delete a comment"
+  deleteComment(commentId: String!): Comment!
+
+  # "Edit an existing comment"
+  editComment(commentId: String!, content: String!): Comment!
 }
 
 type SubmitQuizResponse {
@@ -42,4 +63,9 @@ type Tokens {
 type UserWithTokens {
   user: User!
   tokens: Tokens!
+}
+
+input ChapterOrderInput {
+  chapterId: String!
+  position: Int!
 }

@@ -1,7 +1,13 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { BookMarkedIcon, HomeIcon, LibraryBig, UsersIcon } from "lucide-react";
+import {
+  BookMarkedIcon,
+  CompassIcon,
+  HomeIcon,
+  LibraryBigIcon,
+  UsersIcon,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 
@@ -10,11 +16,11 @@ type Props = { className?: string };
 const STUDENT_ELEMENTS = [
   { href: "/student", text: "Accueil", icon: HomeIcon },
   {
-    href: "/student/lesson",
+    href: "/student/lessons",
     text: "Votre bibliothèque",
-    icon: BookMarkedIcon,
+    icon: LibraryBigIcon,
   },
-  { href: "/student/library", text: "Librairie", icon: LibraryBig },
+  { href: "/student/browse", text: "Parcourir", icon: CompassIcon },
 ];
 
 const TEACHER_ELEMENTS = [

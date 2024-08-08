@@ -53,32 +53,28 @@ const lessonMutationsResolvers: MutationResolvers = {
   },
 
   updateLesson: async (_parent, { lessonId, input }, { prisma, minio }) => {
-    const { sortedChapterIds, pictureFile, ...restInput } = input;
+    const { pictureFile, category, title, ...restInput } = input;
 
-    const id = lessonId || uuidv4();
-
-    const fileName =
+    const picturePath =
       pictureFile &&
       (await minio.saveFile({
         file: pictureFile,
         allowedMimes: IMAGES_MIMES,
-        fileId: id,
+        fileId: lessonId,
       }));
 
-    if (!pictureFile && !lessonId)
-      throw new Error("pictureFile is required for creation");
-
     const lesson = await prisma.lesson.update({
-      where: { id },
+      where: { id: lessonId },
       data: {
         ...restInput,
-        picturePath: fileName ? fileName : undefined,
-        chapters: sortedChapterIds
+        title: title ?? undefined,
+        picturePath,
+        category: category
           ? {
-              update: sortedChapterIds?.map((chapterId, index) => ({
-                data: { order: index + 1 },
-                where: { id: chapterId },
-              })),
+              connectOrCreate: {
+                where: { name: category.toLowerCase() },
+                create: { name: category.toLowerCase() },
+              },
             }
           : undefined,
       },
@@ -134,6 +130,17 @@ const lessonMutationsResolvers: MutationResolvers = {
     });
 
     return lesson;
+  },
+
+  orderChapters: async (_parent, { chaptersOrder, lessonId }, { prisma }) => {
+    for (let item of chaptersOrder) {
+      await prisma.chapter.update({
+        where: { id: item.chapterId, lessonId },
+        data: { position: item.position },
+      });
+    }
+
+    return true;
   },
 };
 

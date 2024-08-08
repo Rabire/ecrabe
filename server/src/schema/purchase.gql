@@ -1,0 +1,9 @@
+type Purchase {
+  id: ID!
+  userId: String!
+  user: User!
+  lessonId: String!
+  lesson: Lesson!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

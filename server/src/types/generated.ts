@@ -6,9 +6,12 @@ import {
 } from "graphql";
 import {
   User as UserModel,
+  Comment as CommentModel,
   Lesson as LessonModel,
   Chapter as ChapterModel,
   Question as QuestionModel,
+  Purchase as PurchaseModel,
+  Category as CategoryModel,
 } from "@prisma/client";
 import { GraphQLContext } from "../middleware/context";
 export type Maybe<T> = T | null;
@@ -46,18 +49,26 @@ export type Scalars = {
   Upload: { input: FileUpload; output: FileUpload };
 };
 
+export type Category = {
+  __typename?: "Category";
+  id: Scalars["ID"]["output"];
+  lessons: Array<Lesson>;
+  name?: Maybe<Scalars["String"]["output"]>;
+};
+
 export type Chapter = {
   __typename?: "Chapter";
   comments: Array<Comment>;
+  createdAt: Scalars["DateTime"]["output"];
   hasQuestions: Scalars["Boolean"]["output"];
   id: Scalars["ID"]["output"];
+  isFree: Scalars["Boolean"]["output"];
+  isPublished: Scalars["Boolean"]["output"];
   isQuizCompletedByUser: Scalars["Boolean"]["output"];
   isVideoWatchedByUser: Scalars["Boolean"]["output"];
   lesson: Lesson;
-  /** A description of the chapter content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars["String"]["output"]>;
-  /** An integer representing the order of the chapter in the lesson. */
-  order: Scalars["Int"]["output"];
+  position: Scalars["Int"]["output"];
   questions: Array<Question>;
   title: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
@@ -77,6 +88,11 @@ export type ChapterInput = {
   videoDuration: Scalars["Int"]["input"];
 };
 
+export type ChapterOrderInput = {
+  chapterId: Scalars["String"]["input"];
+  position: Scalars["Int"]["input"];
+};
+
 export type Comment = {
   __typename?: "Comment";
   author: User;
@@ -88,41 +104,48 @@ export type Comment = {
 
 export type Lesson = {
   __typename?: "Lesson";
+  category?: Maybe<Category>;
   chapters: Array<Chapter>;
-  /** A short description of the lesson. */
   description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
-  /** A description of the lesson content or presentation - in markdown format. */
+  isCurrentUserTeacher: Scalars["Boolean"]["output"];
+  isPurchasedByCurrentUser: Scalars["Boolean"]["output"];
   markdownContent?: Maybe<Scalars["String"]["output"]>;
-  /** The URL of the cover picture of the lesson. */
   pictureUrl?: Maybe<Scalars["String"]["output"]>;
+  price?: Maybe<Scalars["Float"]["output"]>;
+  purchases: Array<Purchase>;
   teacher: User;
   title: Scalars["String"]["output"];
-  /** Duration of the lesson in seconds. */
   totalDuration: Scalars["Int"]["output"];
-  /** Date of the last update of a nested chapter. */
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-  /** Completion percentage of lessons watch & quiz */
   userProgress: Scalars["Int"]["output"];
 };
 
 export type LessonInput = {
-  /** The URL of the cover picture of the lesson. */
+  category?: InputMaybe<Scalars["String"]["input"]>;
   description?: InputMaybe<Scalars["String"]["input"]>;
-  /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: InputMaybe<Scalars["String"]["input"]>;
-  /** The file of the cover picture of the lesson. */
   pictureFile?: InputMaybe<Scalars["Upload"]["input"]>;
-  sortedChapterIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  title: Scalars["String"]["input"];
+  price?: InputMaybe<Scalars["Float"]["input"]>;
+  title?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type Mutation = {
   __typename?: "Mutation";
+  /** Admin only - Create a category */
+  createCategory: Category;
+  createComment: Comment;
   /** Create a lesson */
   createLesson: Lesson;
+  deleteComment: Comment;
+  editComment: Comment;
+  /** Login a user using email and password */
   loginUser: UserWithTokens;
+  /** Update chapters position */
+  orderChapters: Scalars["Boolean"]["output"];
+  /** Use cookie to refresh the access token */
   refreshToken: Tokens;
+  /** Create a user */
   registerUser: UserWithTokens;
   /** Upsert a user video watch progress */
   saveVideoProgress: Scalars["Boolean"]["output"];
@@ -134,13 +157,36 @@ export type Mutation = {
   upsertChapter: Chapter;
 };
 
+export type MutationCreateCategoryArgs = {
+  name: Scalars["String"]["input"];
+};
+
+export type MutationCreateCommentArgs = {
+  chapterId: Scalars["String"]["input"];
+  content: Scalars["String"]["input"];
+};
+
 export type MutationCreateLessonArgs = {
   title: Scalars["String"]["input"];
+};
+
+export type MutationDeleteCommentArgs = {
+  commentId: Scalars["String"]["input"];
+};
+
+export type MutationEditCommentArgs = {
+  commentId: Scalars["String"]["input"];
+  content: Scalars["String"]["input"];
 };
 
 export type MutationLoginUserArgs = {
   email: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
+};
+
+export type MutationOrderChaptersArgs = {
+  chaptersOrder: Array<ChapterOrderInput>;
+  lessonId: Scalars["String"]["input"];
 };
 
 export type MutationRegisterUserArgs = {
@@ -169,18 +215,37 @@ export type MutationUpsertChapterArgs = {
   videoFile?: InputMaybe<Scalars["Upload"]["input"]>;
 };
 
+export type Purchase = {
+  __typename?: "Purchase";
+  createdAt: Scalars["DateTime"]["output"];
+  id: Scalars["ID"]["output"];
+  lesson: Lesson;
+  lessonId: Scalars["String"]["output"];
+  updatedAt: Scalars["DateTime"]["output"];
+  user: User;
+  userId: Scalars["String"]["output"];
+};
+
 export type Query = {
   __typename?: "Query";
+  /** Retrieves all lessons */
+  browseLessons: Array<Lesson>;
+  /** Retrieves all categories */
+  categories: Array<Category>;
   /** Retrieves a lesson chapter by String */
   chapter: Chapter;
   /** Retrieves a lesson by id */
   lesson: Lesson;
-  /** Retrieves all lessons */
-  lessons: Array<Lesson>;
+  lessonCheckoutUrl: Scalars["String"]["output"];
   /** Retrieves a single user by id, if no id is provided, it will return the current user */
   user: User;
   /** Retrieves all users */
   users: Array<User>;
+};
+
+export type QueryBrowseLessonsArgs = {
+  category?: InputMaybe<Scalars["String"]["input"]>;
+  search?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type QueryChapterArgs = {
@@ -188,6 +253,10 @@ export type QueryChapterArgs = {
 };
 
 export type QueryLessonArgs = {
+  lessonId: Scalars["String"]["input"];
+};
+
+export type QueryLessonCheckoutUrlArgs = {
   lessonId: Scalars["String"]["input"];
 };
 
@@ -241,6 +310,8 @@ export type Tokens = {
 
 export type User = {
   __typename?: "User";
+  comments: Array<Comment>;
+  createdLessons: Array<Lesson>;
   email: Scalars["String"]["output"];
   firstLogin: Scalars["DateTime"]["output"];
   firstName: Scalars["String"]["output"];
@@ -249,7 +320,7 @@ export type User = {
   id: Scalars["ID"]["output"];
   lastLogin: Scalars["DateTime"]["output"];
   lastName: Scalars["String"]["output"];
-  lessons: Array<Lesson>;
+  purchases: Array<Purchase>;
   role: Role;
 };
 
@@ -370,17 +441,19 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
+  Category: ResolverTypeWrapper<CategoryModel>;
   Chapter: ResolverTypeWrapper<ChapterModel>;
   ChapterInput: ChapterInput;
-  Comment: ResolverTypeWrapper<
-    Omit<Comment, "author"> & { author: ResolversTypes["User"] }
-  >;
+  ChapterOrderInput: ChapterOrderInput;
+  Comment: ResolverTypeWrapper<CommentModel>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
+  Float: ResolverTypeWrapper<Scalars["Float"]["output"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
   Lesson: ResolverTypeWrapper<LessonModel>;
   LessonInput: LessonInput;
   Mutation: ResolverTypeWrapper<{}>;
+  Purchase: ResolverTypeWrapper<PurchaseModel>;
   Query: ResolverTypeWrapper<{}>;
   Question: ResolverTypeWrapper<QuestionModel>;
   QuestionAnswerInput: QuestionAnswerInput;
@@ -400,15 +473,19 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars["Boolean"]["output"];
+  Category: CategoryModel;
   Chapter: ChapterModel;
   ChapterInput: ChapterInput;
-  Comment: Omit<Comment, "author"> & { author: ResolversParentTypes["User"] };
+  ChapterOrderInput: ChapterOrderInput;
+  Comment: CommentModel;
   DateTime: Scalars["DateTime"]["output"];
+  Float: Scalars["Float"]["output"];
   ID: Scalars["ID"]["output"];
   Int: Scalars["Int"]["output"];
   Lesson: LessonModel;
   LessonInput: LessonInput;
   Mutation: {};
+  Purchase: PurchaseModel;
   Query: {};
   Question: QuestionModel;
   QuestionAnswerInput: QuestionAnswerInput;
@@ -424,6 +501,17 @@ export type ResolversParentTypes = ResolversObject<{
   };
 }>;
 
+export type CategoryResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends
+    ResolversParentTypes["Category"] = ResolversParentTypes["Category"],
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ChapterResolvers<
   ContextType = GraphQLContext,
   ParentType extends
@@ -434,8 +522,11 @@ export type ChapterResolvers<
     ParentType,
     ContextType
   >;
+  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   hasQuestions?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  isFree?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  isPublished?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   isQuizCompletedByUser?: Resolver<
     ResolversTypes["Boolean"],
     ParentType,
@@ -452,7 +543,7 @@ export type ChapterResolvers<
     ParentType,
     ContextType
   >;
-  order?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  position?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   questions?: Resolver<
     Array<ResolversTypes["Question"]>,
     ParentType,
@@ -501,6 +592,11 @@ export type LessonResolvers<
   ParentType extends
     ResolversParentTypes["Lesson"] = ResolversParentTypes["Lesson"],
 > = ResolversObject<{
+  category?: Resolver<
+    Maybe<ResolversTypes["Category"]>,
+    ParentType,
+    ContextType
+  >;
   chapters?: Resolver<
     Array<ResolversTypes["Chapter"]>,
     ParentType,
@@ -512,6 +608,16 @@ export type LessonResolvers<
     ContextType
   >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  isCurrentUserTeacher?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType
+  >;
+  isPurchasedByCurrentUser?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType
+  >;
   markdownContent?: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
@@ -519,6 +625,12 @@ export type LessonResolvers<
   >;
   pictureUrl?: Resolver<
     Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  price?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  purchases?: Resolver<
+    Array<ResolversTypes["Purchase"]>,
     ParentType,
     ContextType
   >;
@@ -539,17 +651,47 @@ export type MutationResolvers<
   ParentType extends
     ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = ResolversObject<{
+  createCategory?: Resolver<
+    ResolversTypes["Category"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateCategoryArgs, "name">
+  >;
+  createComment?: Resolver<
+    ResolversTypes["Comment"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateCommentArgs, "chapterId" | "content">
+  >;
   createLesson?: Resolver<
     ResolversTypes["Lesson"],
     ParentType,
     ContextType,
     RequireFields<MutationCreateLessonArgs, "title">
   >;
+  deleteComment?: Resolver<
+    ResolversTypes["Comment"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteCommentArgs, "commentId">
+  >;
+  editComment?: Resolver<
+    ResolversTypes["Comment"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationEditCommentArgs, "commentId" | "content">
+  >;
   loginUser?: Resolver<
     ResolversTypes["UserWithTokens"],
     ParentType,
     ContextType,
     RequireFields<MutationLoginUserArgs, "email" | "password">
+  >;
+  orderChapters?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationOrderChaptersArgs, "chaptersOrder" | "lessonId">
   >;
   refreshToken?: Resolver<ResolversTypes["Tokens"], ParentType, ContextType>;
   registerUser?: Resolver<
@@ -584,11 +726,37 @@ export type MutationResolvers<
   >;
 }>;
 
+export type PurchaseResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends
+    ResolversParentTypes["Purchase"] = ResolversParentTypes["Purchase"],
+> = ResolversObject<{
+  createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  lesson?: Resolver<ResolversTypes["Lesson"], ParentType, ContextType>;
+  lessonId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<
   ContextType = GraphQLContext,
   ParentType extends
     ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
+  browseLessons?: Resolver<
+    Array<ResolversTypes["Lesson"]>,
+    ParentType,
+    ContextType,
+    Partial<QueryBrowseLessonsArgs>
+  >;
+  categories?: Resolver<
+    Array<ResolversTypes["Category"]>,
+    ParentType,
+    ContextType
+  >;
   chapter?: Resolver<
     ResolversTypes["Chapter"],
     ParentType,
@@ -601,7 +769,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryLessonArgs, "lessonId">
   >;
-  lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
+  lessonCheckoutUrl?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryLessonCheckoutUrlArgs, "lessonId">
+  >;
   user?: Resolver<
     ResolversTypes["User"],
     ParentType,
@@ -657,6 +830,16 @@ export type UserResolvers<
   ParentType extends
     ResolversParentTypes["User"] = ResolversParentTypes["User"],
 > = ResolversObject<{
+  comments?: Resolver<
+    Array<ResolversTypes["Comment"]>,
+    ParentType,
+    ContextType
+  >;
+  createdLessons?: Resolver<
+    Array<ResolversTypes["Lesson"]>,
+    ParentType,
+    ContextType
+  >;
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   firstLogin?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -665,7 +848,11 @@ export type UserResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   lastLogin?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  lessons?: Resolver<Array<ResolversTypes["Lesson"]>, ParentType, ContextType>;
+  purchases?: Resolver<
+    Array<ResolversTypes["Purchase"]>,
+    ParentType,
+    ContextType
+  >;
   role?: Resolver<ResolversTypes["Role"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -681,11 +868,13 @@ export type UserWithTokensResolvers<
 }>;
 
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
+  Category?: CategoryResolvers<ContextType>;
   Chapter?: ChapterResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Lesson?: LessonResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Purchase?: PurchaseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Question?: QuestionResolvers<ContextType>;
   SubmitQuizResponse?: SubmitQuizResponseResolvers<ContextType>;

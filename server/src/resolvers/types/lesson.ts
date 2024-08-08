@@ -60,19 +60,36 @@ const lessonResolver: LessonResolvers = {
   },
 
   chapters: ({ id }, _args, { prisma }) => {
+    const isOwner = true; // TODO: unmock
+
     return prisma.lesson.findUniqueOrThrow({ where: { id } }).chapters({
-      orderBy: { order: "asc" },
+      where: { isPublished: isOwner ? true : undefined },
+      orderBy: { position: "asc" },
     });
   },
 
   updatedAt: async ({ id }, _args, { prisma }) => {
     const chapters = await prisma.lesson
       .findUniqueOrThrow({ where: { id } })
-      .chapters({ orderBy: { order: "desc" } });
+      .chapters({ orderBy: { position: "desc" } });
 
     if (chapters.length === 0) return null;
 
     return chapters[0].updatedAt;
+  },
+
+  isPurchasedByCurrentUser: async ({ id }, _args, { prisma, userId }) => {
+    if (!userId) throw new Error("userId missing");
+
+    const purchase = await prisma.purchase.findUnique({
+      where: { userId_lessonId: { userId, lessonId: id } },
+    });
+
+    return Boolean(purchase);
+  },
+
+  isCurrentUserTeacher: async ({ teacherId }, _args, { userId }) => {
+    return teacherId === userId;
   },
 };
 

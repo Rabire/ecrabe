@@ -2,7 +2,7 @@ query TeacherLessonsPage($lessonId: String!) {
   lesson(lessonId: $lessonId) {
     chapters {
       id
-      order
+      position
       title
       markdownContent
       updatedAt
@@ -12,17 +12,20 @@ query TeacherLessonsPage($lessonId: String!) {
       isVideoWatchedByUser
       userVideoWatchProgress
       hasQuestions
+
       questions {
         id
         question
         answers
         correctAnswer
       }
+
       comments {
         id
         content
         createdAt
         deletedAt
+
         author {
           fullName
           id

@@ -1,19 +1,23 @@
 import { ApolloServer, BaseContext } from "@apollo/server";
 import { PrismaClient } from "@prisma/client";
 import type { Request } from "express";
+import Stripe from "stripe";
+import { STRIPE_SECRET_KEY } from "../helpers/env-variables";
 import { verifyAccessToken } from "../helpers/jwt";
 import ExtendedMinioClient from "../services/minio";
-
 export interface GraphQLContext {
   userId: string | undefined;
   prisma: PrismaClient;
   minio: ExtendedMinioClient;
+  stripe: Stripe;
   req: Request;
 }
 
 const prisma = new PrismaClient();
 
 const minio = new ExtendedMinioClient();
+
+const stripe = new Stripe(STRIPE_SECRET_KEY || "");
 
 const createContext = async (
   req: Request,
@@ -35,6 +39,7 @@ const createContext = async (
     userId,
     prisma,
     minio,
+    stripe,
     req,
   };
 };

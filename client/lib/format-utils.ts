@@ -1,3 +1,4 @@
+import currency from "currency.js";
 import { format as dateFnsFormat } from "date-fns";
 
 export const formatSeconds = (seconds: number) => {
@@ -11,3 +12,12 @@ export const formatSeconds = (seconds: number) => {
 
 export const formatDate = (date?: Date | null) =>
   date ? dateFnsFormat(date || new Date(), "dd/MM/yyyy") : undefined;
+
+export const formatPrice = (price: number) =>
+  currency(price, {
+    separator: " ",
+    decimal: ",",
+    symbol: "€",
+    precision: 0,
+    pattern: `# !`,
+  }).format();
