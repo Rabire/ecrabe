@@ -16,11 +16,18 @@ const lessonQueryResolvers: QueryResolvers = {
   },
 
   lesson: async (_parent, { lessonId }, { prisma, userId }) => {
-    const isOwner = true; // TODO: unmock
-
-    return prisma.lesson.findUniqueOrThrow({
-      where: { id: lessonId, isPublished: isOwner ? true : undefined },
+    const lesson = await prisma.lesson.findFirst({
+      where: {
+        OR: [
+          { id: lessonId, isPublished: false, teacherId: userId },
+          { id: lessonId, isPublished: true },
+        ],
+      },
     });
+
+    if (!lesson) throw new Error("Lesson not found");
+
+    return lesson;
   },
 
   lessonCheckoutUrl: async (
