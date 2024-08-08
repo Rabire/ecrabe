@@ -79,8 +79,11 @@ export type Lesson = {
   chapters: Array<Chapter>;
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  isCurrentUserTeacher: Scalars['Boolean']['output'];
+  isPurchasedByCurrentUser: Scalars['Boolean']['output'];
   markdownContent?: Maybe<Scalars['String']['output']>;
   pictureUrl?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
   purchases: Array<Purchase>;
   teacher: User;
   title: Scalars['String']['output'];
@@ -90,19 +93,23 @@ export type Lesson = {
 };
 
 export type LessonInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   markdownContent?: InputMaybe<Scalars['String']['input']>;
   pictureFile?: InputMaybe<Scalars['Upload']['input']>;
-  sortedChapterIds?: InputMaybe<Array<Scalars['String']['input']>>;
-  title: Scalars['String']['input'];
+  price?: InputMaybe<Scalars['Float']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   /** Admin only - Create a category */
   createCategory: Category;
+  createComment: Comment;
   /** Create a lesson */
   createLesson: Lesson;
+  deleteComment: Comment;
+  editComment: Comment;
   /** Login a user using email and password */
   loginUser: UserWithTokens;
   /** Update chapters position */
@@ -127,8 +134,25 @@ export type MutationCreateCategoryArgs = {
 };
 
 
+export type MutationCreateCommentArgs = {
+  chapterId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+};
+
+
 export type MutationCreateLessonArgs = {
   title: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCommentArgs = {
+  commentId: Scalars['String']['input'];
+};
+
+
+export type MutationEditCommentArgs = {
+  commentId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
 };
 
 
@@ -195,6 +219,7 @@ export type Query = {
   chapter: Chapter;
   /** Retrieves a lesson by id */
   lesson: Lesson;
+  lessonCheckoutUrl: Scalars['String']['output'];
   /** Retrieves a single user by id, if no id is provided, it will return the current user */
   user: User;
   /** Retrieves all users */
@@ -214,6 +239,11 @@ export type QueryChapterArgs = {
 
 
 export type QueryLessonArgs = {
+  lessonId: Scalars['String']['input'];
+};
+
+
+export type QueryLessonCheckoutUrlArgs = {
   lessonId: Scalars['String']['input'];
 };
 
