@@ -1,18 +1,29 @@
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 import { COOKIE_NAME } from "../../helpers/env-variables";
 import { generateTokens, verifyRefreshToken } from "../../helpers/jwt";
 import { type MutationResolvers } from "../../types/generated";
 
 const userMutationsResolvers: MutationResolvers = {
-  registerUser: async (_parent, { input }, { prisma }) => {
+  registerUser: async (_parent, { input }, { prisma, stripe }) => {
     const { password, ...restInput } = input;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const userId = uuidv4();
+
+    const customer = await stripe.customers.create({
+      name: `${restInput.firstName} ${restInput.lastName}`,
+      email: restInput.email,
+      metadata: { userId },
+    });
+
     const user = await prisma.user.create({
       data: {
+        id: userId,
         ...restInput,
         hashedPassword,
+        stripeCustomerId: customer.id,
       },
     });
 
@@ -33,7 +44,7 @@ const userMutationsResolvers: MutationResolvers = {
     return { tokens: generateTokens(user.id), user };
   },
 
-  refreshToken: async (_parent, _args, { req }) => {
+  refreshToken: async (_parent, _args, { req, prisma }) => {
     const cookies = JSON.parse((req.headers.cookies as string) || "{}");
     const refreshToken = cookies[COOKIE_NAME || "COOKIE_NAME"];
 
@@ -41,12 +52,10 @@ const userMutationsResolvers: MutationResolvers = {
 
     const { userId } = verifyRefreshToken(refreshToken);
 
-    console.log({ userId });
-
-    // await prisma.user.update({
-    //   where: { id: tokenInfo.sub },
-    //   data: { lastLogin: new Date() },
-    // }); // TODO: update user last login date
+    await prisma.user.update({
+      where: { id: userId },
+      data: { lastLogin: new Date() },
+    });
 
     return generateTokens(userId);
   },

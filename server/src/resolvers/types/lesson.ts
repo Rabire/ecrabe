@@ -61,14 +61,14 @@ const lessonResolver: LessonResolvers = {
 
   chapters: ({ id }, _args, { prisma }) => {
     return prisma.lesson.findUniqueOrThrow({ where: { id } }).chapters({
-      orderBy: { order: "asc" },
+      orderBy: { position: "asc" },
     });
   },
 
   updatedAt: async ({ id }, _args, { prisma }) => {
     const chapters = await prisma.lesson
       .findUniqueOrThrow({ where: { id } })
-      .chapters({ orderBy: { order: "desc" } });
+      .chapters({ orderBy: { position: "desc" } });
 
     if (chapters.length === 0) return null;
 

@@ -14,3 +14,5 @@ export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 export const COOKIE_NAME = process.env.COOKIE_NAME;
+
+export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;

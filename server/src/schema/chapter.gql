@@ -1,11 +1,13 @@
 type Chapter {
   id: ID!
-  "An integer representing the order of the chapter in the lesson."
-  order: Int!
+  position: Int!
   title: String!
-  "A description of the chapter content or presentation - in markdown format."
   markdownContent: String
+  isPublished: Boolean!
+  isFree: Boolean!
+
   updatedAt: DateTime!
+  createdAt: DateTime!
 
   # Computed
   videoUrl: String
