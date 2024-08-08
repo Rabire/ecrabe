@@ -34,8 +34,11 @@ type Mutation {
   "Admin only - Create a category"
   createCategory(name: String!): Category!
 
-  "Admin only - Update chapters position"
-  orderChapters(chaptersOrder: [ChapterOrder!]!): [ChapterOrder!]!
+  "Update chapters position"
+  orderChapters(
+    lessonId: String!
+    chaptersOrder: [ChapterOrderInput!]!
+  ): Boolean!
 
   # TODO: crud comments
 }
@@ -55,7 +58,7 @@ type UserWithTokens {
   tokens: Tokens!
 }
 
-type ChapterOrder {
+input ChapterOrderInput {
   chapterId: String!
   position: Int!
 }

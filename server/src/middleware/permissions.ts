@@ -73,6 +73,7 @@ const permissions = shield(
       // loginUser
       // refreshToken
       createCategory: rules.isAdmin,
+      orderChapters: rules.isAdmin,
     },
   },
   { allowExternalErrors: true }

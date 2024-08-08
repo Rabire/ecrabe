@@ -1,6 +1,6 @@
 query TeacherHomePage($userId: String) {
   user(userId: $userId) {
-    lessons {
+    createdLessons {
       markdownContent
       id
       description

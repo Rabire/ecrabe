@@ -88,10 +88,9 @@ export type ChapterInput = {
   videoDuration: Scalars["Int"]["input"];
 };
 
-export type ChapterOrder = {
-  __typename?: "ChapterOrder";
-  chapterId: Scalars["String"]["output"];
-  position: Scalars["Int"]["output"];
+export type ChapterOrderInput = {
+  chapterId: Scalars["String"]["input"];
+  position: Scalars["Int"]["input"];
 };
 
 export type Comment = {
@@ -129,12 +128,17 @@ export type LessonInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  /** Admin only - Create a category */
   createCategory: Category;
   /** Create a lesson */
   createLesson: Lesson;
+  /** Login a user using email and password */
   loginUser: UserWithTokens;
-  orderChapters: Array<ChapterOrder>;
+  /** Update chapters position */
+  orderChapters: Scalars["Boolean"]["output"];
+  /** Use cookie to refresh the access token */
   refreshToken: Tokens;
+  /** Create a user */
   registerUser: UserWithTokens;
   /** Upsert a user video watch progress */
   saveVideoProgress: Scalars["Boolean"]["output"];
@@ -160,7 +164,8 @@ export type MutationLoginUserArgs = {
 };
 
 export type MutationOrderChaptersArgs = {
-  chaptersOrder: Array<ChapterOrder>;
+  chaptersOrder: Array<ChapterOrderInput>;
+  lessonId: Scalars["String"]["input"];
 };
 
 export type MutationRegisterUserArgs = {
@@ -413,7 +418,7 @@ export type ResolversTypes = ResolversObject<{
   Category: ResolverTypeWrapper<CategoryModel>;
   Chapter: ResolverTypeWrapper<ChapterModel>;
   ChapterInput: ChapterInput;
-  ChapterOrder: ResolverTypeWrapper<ChapterOrder>;
+  ChapterOrderInput: ChapterOrderInput;
   Comment: ResolverTypeWrapper<CommentModel>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
@@ -444,7 +449,7 @@ export type ResolversParentTypes = ResolversObject<{
   Category: CategoryModel;
   Chapter: ChapterModel;
   ChapterInput: ChapterInput;
-  ChapterOrder: ChapterOrder;
+  ChapterOrderInput: ChapterOrderInput;
   Comment: CommentModel;
   DateTime: Scalars["DateTime"]["output"];
   ID: Scalars["ID"]["output"];
@@ -529,16 +534,6 @@ export type ChapterResolvers<
     ContextType
   >;
   videoUrl?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ChapterOrderResolvers<
-  ContextType = GraphQLContext,
-  ParentType extends
-    ResolversParentTypes["ChapterOrder"] = ResolversParentTypes["ChapterOrder"],
-> = ResolversObject<{
-  chapterId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  position?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -636,10 +631,10 @@ export type MutationResolvers<
     RequireFields<MutationLoginUserArgs, "email" | "password">
   >;
   orderChapters?: Resolver<
-    Array<ResolversTypes["ChapterOrder"]>,
+    ResolversTypes["Boolean"],
     ParentType,
     ContextType,
-    RequireFields<MutationOrderChaptersArgs, "chaptersOrder">
+    RequireFields<MutationOrderChaptersArgs, "chaptersOrder" | "lessonId">
   >;
   refreshToken?: Resolver<ResolversTypes["Tokens"], ParentType, ContextType>;
   registerUser?: Resolver<
@@ -812,7 +807,6 @@ export type UserWithTokensResolvers<
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   Category?: CategoryResolvers<ContextType>;
   Chapter?: ChapterResolvers<ContextType>;
-  ChapterOrder?: ChapterOrderResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Lesson?: LessonResolvers<ContextType>;

@@ -20,18 +20,26 @@ export type Scalars = {
   Upload: { input: any; output: any; }
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['ID']['output'];
+  lessons: Array<Lesson>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
 export type Chapter = {
   __typename?: 'Chapter';
   comments: Array<Comment>;
+  createdAt: Scalars['DateTime']['output'];
   hasQuestions: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+  isFree: Scalars['Boolean']['output'];
+  isPublished: Scalars['Boolean']['output'];
   isQuizCompletedByUser: Scalars['Boolean']['output'];
   isVideoWatchedByUser: Scalars['Boolean']['output'];
   lesson: Lesson;
-  /** A description of the chapter content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars['String']['output']>;
-  /** An integer representing the order of the chapter in the lesson. */
-  order: Scalars['Int']['output'];
+  position: Scalars['Int']['output'];
   questions: Array<Question>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -51,6 +59,11 @@ export type ChapterInput = {
   videoDuration: Scalars['Int']['input'];
 };
 
+export type ChapterOrderInput = {
+  chapterId: Scalars['String']['input'];
+  position: Scalars['Int']['input'];
+};
+
 export type Comment = {
   __typename?: 'Comment';
   author: User;
@@ -62,30 +75,23 @@ export type Comment = {
 
 export type Lesson = {
   __typename?: 'Lesson';
+  category?: Maybe<Category>;
   chapters: Array<Chapter>;
-  /** A short description of the lesson. */
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: Maybe<Scalars['String']['output']>;
-  /** The URL of the cover picture of the lesson. */
   pictureUrl?: Maybe<Scalars['String']['output']>;
+  purchases: Array<Purchase>;
   teacher: User;
   title: Scalars['String']['output'];
-  /** Duration of the lesson in seconds. */
   totalDuration: Scalars['Int']['output'];
-  /** Date of the last update of a nested chapter. */
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-  /** Completion percentage of lessons watch & quiz */
   userProgress: Scalars['Int']['output'];
 };
 
 export type LessonInput = {
-  /** The URL of the cover picture of the lesson. */
   description?: InputMaybe<Scalars['String']['input']>;
-  /** A description of the lesson content or presentation - in markdown format. */
   markdownContent?: InputMaybe<Scalars['String']['input']>;
-  /** The file of the cover picture of the lesson. */
   pictureFile?: InputMaybe<Scalars['Upload']['input']>;
   sortedChapterIds?: InputMaybe<Array<Scalars['String']['input']>>;
   title: Scalars['String']['input'];
@@ -93,10 +99,17 @@ export type LessonInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Admin only - Create a category */
+  createCategory: Category;
   /** Create a lesson */
   createLesson: Lesson;
+  /** Login a user using email and password */
   loginUser: UserWithTokens;
+  /** Update chapters position */
+  orderChapters: Scalars['Boolean']['output'];
+  /** Use cookie to refresh the access token */
   refreshToken: Tokens;
+  /** Create a user */
   registerUser: UserWithTokens;
   /** Upsert a user video watch progress */
   saveVideoProgress: Scalars['Boolean']['output'];
@@ -109,6 +122,11 @@ export type Mutation = {
 };
 
 
+export type MutationCreateCategoryArgs = {
+  name: Scalars['String']['input'];
+};
+
+
 export type MutationCreateLessonArgs = {
   title: Scalars['String']['input'];
 };
@@ -117,6 +135,12 @@ export type MutationCreateLessonArgs = {
 export type MutationLoginUserArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationOrderChaptersArgs = {
+  chaptersOrder: Array<ChapterOrderInput>;
+  lessonId: Scalars['String']['input'];
 };
 
 
@@ -150,18 +174,37 @@ export type MutationUpsertChapterArgs = {
   videoFile?: InputMaybe<Scalars['Upload']['input']>;
 };
 
+export type Purchase = {
+  __typename?: 'Purchase';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  lesson: Lesson;
+  lessonId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  user: User;
+  userId: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  /** Retrieves all lessons */
+  browseLessons: Array<Lesson>;
+  /** Retrieves all categories */
+  categories: Array<Category>;
   /** Retrieves a lesson chapter by String */
   chapter: Chapter;
   /** Retrieves a lesson by id */
   lesson: Lesson;
-  /** Retrieves all lessons */
-  lessons: Array<Lesson>;
   /** Retrieves a single user by id, if no id is provided, it will return the current user */
   user: User;
   /** Retrieves all users */
   users: Array<User>;
+};
+
+
+export type QueryBrowseLessonsArgs = {
+  category?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -225,6 +268,8 @@ export type Tokens = {
 
 export type User = {
   __typename?: 'User';
+  comments: Array<Comment>;
+  createdLessons: Array<Lesson>;
   email: Scalars['String']['output'];
   firstLogin: Scalars['DateTime']['output'];
   firstName: Scalars['String']['output'];
@@ -233,7 +278,7 @@ export type User = {
   id: Scalars['ID']['output'];
   lastLogin: Scalars['DateTime']['output'];
   lastName: Scalars['String']['output'];
-  lessons: Array<Lesson>;
+  purchases: Array<Purchase>;
   role: Role;
 };
 
@@ -286,7 +331,7 @@ export type LessonPageQueryVariables = Exact<{
 }>;
 
 
-export type LessonPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', id: string, title: string, description?: string | null, pictureUrl?: string | null, markdownContent?: string | null, totalDuration: number, userProgress: number, updatedAt?: Date | null, teacher: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string }, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, hasQuestions: boolean }> } };
+export type LessonPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', id: string, title: string, description?: string | null, pictureUrl?: string | null, markdownContent?: string | null, totalDuration: number, userProgress: number, updatedAt?: Date | null, teacher: { __typename?: 'User', id: string, firstName: string, lastName: string, fullName: string }, chapters: Array<{ __typename?: 'Chapter', id: string, position: number, title: string, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, hasQuestions: boolean }> } };
 
 export type EditChapterMutationVariables = Exact<{
   lessonId: Scalars['String']['input'];
@@ -303,7 +348,7 @@ export type ChapterQueryVariables = Exact<{
 }>;
 
 
-export type ChapterQuery = { __typename?: 'Query', chapter: { __typename?: 'Chapter', id: string, order: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, lesson: { __typename?: 'Lesson', id: string } } };
+export type ChapterQuery = { __typename?: 'Query', chapter: { __typename?: 'Chapter', id: string, position: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, lesson: { __typename?: 'Lesson', id: string } } };
 
 export type UpsertChapterMutationVariables = Exact<{
   lessonId: Scalars['String']['input'];
@@ -334,14 +379,14 @@ export type TeacherLessonsPageQueryVariables = Exact<{
 }>;
 
 
-export type TeacherLessonsPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', description?: string | null, id: string, markdownContent?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, userProgress: number, chapters: Array<{ __typename?: 'Chapter', id: string, order: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', fullName: string, id: string } }> }> } };
+export type TeacherLessonsPageQuery = { __typename?: 'Query', lesson: { __typename?: 'Lesson', description?: string | null, id: string, markdownContent?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null, userProgress: number, chapters: Array<{ __typename?: 'Chapter', id: string, position: number, title: string, markdownContent?: string | null, updatedAt: Date, videoUrl?: string | null, videoDuration?: number | null, isQuizCompletedByUser: boolean, isVideoWatchedByUser: boolean, userVideoWatchProgress: number, hasQuestions: boolean, questions: Array<{ __typename?: 'Question', id: string, question: string, answers: Array<string>, correctAnswer: string }>, comments: Array<{ __typename?: 'Comment', id: string, content: string, createdAt: Date, deletedAt?: Date | null, author: { __typename?: 'User', fullName: string, id: string } }> }> } };
 
 export type TeacherHomePageQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type TeacherHomePageQuery = { __typename?: 'Query', user: { __typename?: 'User', lessons: Array<{ __typename?: 'Lesson', markdownContent?: string | null, id: string, description?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null }> } };
+export type TeacherHomePageQuery = { __typename?: 'Query', user: { __typename?: 'User', createdLessons: Array<{ __typename?: 'Lesson', markdownContent?: string | null, id: string, description?: string | null, pictureUrl?: string | null, title: string, totalDuration: number, updatedAt?: Date | null }> } };
 
 
 export const LoginDocument = gql`
@@ -582,7 +627,7 @@ export const LessonPageDocument = gql`
     }
     chapters {
       id
-      order
+      position
       title
       isQuizCompletedByUser
       isVideoWatchedByUser
@@ -670,7 +715,7 @@ export const ChapterDocument = gql`
     query Chapter($chapterId: String!) {
   chapter(chapterId: $chapterId) {
     id
-    order
+    position
     title
     markdownContent
     updatedAt
@@ -828,7 +873,7 @@ export const TeacherLessonsPageDocument = gql`
   lesson(lessonId: $lessonId) {
     chapters {
       id
-      order
+      position
       title
       markdownContent
       updatedAt
@@ -897,7 +942,7 @@ export type TeacherLessonsPageQueryResult = Apollo.QueryResult<TeacherLessonsPag
 export const TeacherHomePageDocument = gql`
     query TeacherHomePage($userId: String) {
   user(userId: $userId) {
-    lessons {
+    createdLessons {
       markdownContent
       id
       description

@@ -136,15 +136,15 @@ const lessonMutationsResolvers: MutationResolvers = {
     return lesson;
   },
 
-  orderChapters: async (_parent, { chaptersOrder }, { prisma }) => {
+  orderChapters: async (_parent, { chaptersOrder, lessonId }, { prisma }) => {
     for (let item of chaptersOrder) {
       await prisma.chapter.update({
-        where: { id: item.chapterId },
+        where: { id: item.chapterId, lessonId },
         data: { position: item.position },
       });
     }
 
-    return chaptersOrder;
+    return true;
   },
 };
 
