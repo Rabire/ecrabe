@@ -2,6 +2,7 @@ import { formatPrice } from "@/lib/format-utils";
 import { cn } from "@/lib/utils";
 import { Lesson } from "@/src/types/graphql-generated";
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent } from "./ui/card";
 
 type Props = {
@@ -24,7 +25,7 @@ const LessonCard = ({ lesson, isTeacher }: Props) => {
     : `/student/lesson/${lesson.id}`;
 
   return (
-    <a href={url}>
+    <Link href={url}>
       <Card clickable className="h-full">
         <CardContent className="space-y-4 p-3">
           <div className="relative h-36 overflow-hidden rounded-md bg-accent">
@@ -61,7 +62,7 @@ const LessonCard = ({ lesson, isTeacher }: Props) => {
           </div>
         </CardContent>
       </Card>
-    </a>
+    </Link>
   );
 };
 
