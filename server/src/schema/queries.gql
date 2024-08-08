@@ -16,4 +16,6 @@ type Query {
 
   "Retrieves a single user by id, if no id is provided, it will return the current user"
   user(userId: String): User!
+
+  lessonCheckoutUrl(lessonId: String!): String!
 }

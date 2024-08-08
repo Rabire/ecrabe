@@ -112,6 +112,7 @@ export type Lesson = {
   isPurchasedByCurrentUser: Scalars["Boolean"]["output"];
   markdownContent?: Maybe<Scalars["String"]["output"]>;
   pictureUrl?: Maybe<Scalars["String"]["output"]>;
+  price?: Maybe<Scalars["Float"]["output"]>;
   purchases: Array<Purchase>;
   teacher: User;
   title: Scalars["String"]["output"];
@@ -121,11 +122,12 @@ export type Lesson = {
 };
 
 export type LessonInput = {
+  category?: InputMaybe<Scalars["String"]["input"]>;
   description?: InputMaybe<Scalars["String"]["input"]>;
   markdownContent?: InputMaybe<Scalars["String"]["input"]>;
   pictureFile?: InputMaybe<Scalars["Upload"]["input"]>;
-  sortedChapterIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  title: Scalars["String"]["input"];
+  price?: InputMaybe<Scalars["Float"]["input"]>;
+  title?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type Mutation = {
@@ -445,6 +447,7 @@ export type ResolversTypes = ResolversObject<{
   ChapterOrderInput: ChapterOrderInput;
   Comment: ResolverTypeWrapper<CommentModel>;
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]["output"]>;
+  Float: ResolverTypeWrapper<Scalars["Float"]["output"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
   Lesson: ResolverTypeWrapper<LessonModel>;
@@ -476,6 +479,7 @@ export type ResolversParentTypes = ResolversObject<{
   ChapterOrderInput: ChapterOrderInput;
   Comment: CommentModel;
   DateTime: Scalars["DateTime"]["output"];
+  Float: Scalars["Float"]["output"];
   ID: Scalars["ID"]["output"];
   Int: Scalars["Int"]["output"];
   Lesson: LessonModel;
@@ -624,6 +628,7 @@ export type LessonResolvers<
     ParentType,
     ContextType
   >;
+  price?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
   purchases?: Resolver<
     Array<ResolversTypes["Purchase"]>,
     ParentType,

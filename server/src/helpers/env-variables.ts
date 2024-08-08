@@ -16,3 +16,5 @@ export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 export const COOKIE_NAME = process.env.COOKIE_NAME;
 
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+
+export const FRONTEND_URL = process.env.FRONTEND_URL;

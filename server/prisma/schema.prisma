@@ -44,6 +44,7 @@ model Lesson {
   picturePath     String?
   markdownContent String?
   isPublished     Boolean @default(false)
+  price           Float?
 
   chapters  Chapter[]
   purchases Purchase[]
