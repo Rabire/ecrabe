@@ -10,6 +10,8 @@ type Lesson {
   totalDuration: Int!
   userProgress: Int!
   updatedAt: DateTime
+  isPurchasedByCurrentUser: Boolean!
+  isCurrentUserTeacher: Boolean!
 
   # Relations
   teacher: User!

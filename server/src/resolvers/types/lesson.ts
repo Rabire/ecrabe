@@ -77,6 +77,20 @@ const lessonResolver: LessonResolvers = {
 
     return chapters[0].updatedAt;
   },
+
+  isPurchasedByCurrentUser: async ({ id }, _args, { prisma, userId }) => {
+    if (!userId) throw new Error("userId missing");
+
+    const purchase = await prisma.purchase.findUnique({
+      where: { userId_lessonId: { userId, lessonId: id } },
+    });
+
+    return Boolean(purchase);
+  },
+
+  isCurrentUserTeacher: async ({ teacherId }, _args, { userId }) => {
+    return teacherId === userId;
+  },
 };
 
 export default lessonResolver;

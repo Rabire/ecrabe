@@ -108,6 +108,8 @@ export type Lesson = {
   chapters: Array<Chapter>;
   description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
+  isCurrentUserTeacher: Scalars["Boolean"]["output"];
+  isPurchasedByCurrentUser: Scalars["Boolean"]["output"];
   markdownContent?: Maybe<Scalars["String"]["output"]>;
   pictureUrl?: Maybe<Scalars["String"]["output"]>;
   purchases: Array<Purchase>;
@@ -232,6 +234,7 @@ export type Query = {
   chapter: Chapter;
   /** Retrieves a lesson by id */
   lesson: Lesson;
+  lessonCheckoutUrl: Scalars["String"]["output"];
   /** Retrieves a single user by id, if no id is provided, it will return the current user */
   user: User;
   /** Retrieves all users */
@@ -248,6 +251,10 @@ export type QueryChapterArgs = {
 };
 
 export type QueryLessonArgs = {
+  lessonId: Scalars["String"]["input"];
+};
+
+export type QueryLessonCheckoutUrlArgs = {
   lessonId: Scalars["String"]["input"];
 };
 
@@ -597,6 +604,16 @@ export type LessonResolvers<
     ContextType
   >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  isCurrentUserTeacher?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType
+  >;
+  isPurchasedByCurrentUser?: Resolver<
+    ResolversTypes["Boolean"],
+    ParentType,
+    ContextType
+  >;
   markdownContent?: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
@@ -746,6 +763,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryLessonArgs, "lessonId">
+  >;
+  lessonCheckoutUrl?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryLessonCheckoutUrlArgs, "lessonId">
   >;
   user?: Resolver<
     ResolversTypes["User"],
