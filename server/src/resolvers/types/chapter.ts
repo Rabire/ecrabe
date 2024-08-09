@@ -29,8 +29,20 @@ const chapterResolver: ChapterResolvers = {
     return Boolean(userAnswer);
   },
 
-  videoUrl: async ({ videoPath }, _, { minio }) => {
+  videoUrl: async (
+    { videoPath, isFree, lessonId },
+    _,
+    { minio, prisma, userId }
+  ) => {
     if (!videoPath) return null;
+
+    const lesson = await prisma.lesson.findUniqueOrThrow({
+      where: { id: lessonId },
+    });
+
+    const canViewChapter = isFree || userId === lesson.teacherId;
+
+    if (!canViewChapter) return null;
 
     const url = await minio.getFileUrl(videoPath);
 
@@ -56,12 +68,11 @@ const chapterResolver: ChapterResolvers = {
   },
 
   comments: ({ id }, _args, { prisma }) => {
-    return [];
-    //   return prisma.chapter.findUniqueOrThrow({ where: { id } }).comments({
-    //     where: { deletedAt: null, editedCommentId: null },
-    //     orderBy: { createdAt: "desc" },
-    //   });
-  }, // FIXME:
+    return prisma.chapter.findUniqueOrThrow({ where: { id } }).comments({
+      where: { deletedAt: null, editedCommentId: null },
+      orderBy: { createdAt: "desc" },
+    });
+  },
 
   hasQuestions: async ({ id }, _args, { prisma }) => {
     const questions = await prisma.chapter
